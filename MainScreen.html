@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .main {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+        .footer-planet {
+            display: flex;
+            justify-content: center;
+        }
+        .footer-main {
+            display: flex;
+            justify-content: center;
+        }
+        .footer-planet-second {
+            width: 990px
+        }
+        .footer-main-second {
+            width: 990px;
+        }
+        .footer-main-bottom-text {
+            display: flex;
+            justify-content: center;
+        }
+        .footer-main-top {
+            display: flex;
+            flex-direction: row;
+            margin-top: 50px;
+        }
+        .footer-main-leftpart {
+            width: 336px;
+            margin-right: 80px;
+        }
+        .footer-main-rightpart {
+            display: flex;
+            flex-direction:row;
+            margin-top: 20px;
+        }
+        .footer-main-maininfo {
+            width: 340px;
+        }
+        .footer-main {
+            background-color: #323232;
+        }
+        .footer-planet {
+            background-color: #379028;
+            display: flex;
+            justify-content: center;
+        }
+        .footer-planet-second {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 70px;
+        }
+        .footer-planet-header {
+            display: flex;
+            justify-content: center;
+        }
+        .footer-planet-text {
+            display: flex;
+            justify-content: center;
+        }
+        .footer-planet-text-second {
+            width: 502px;
+            text-align: center;
+        }
+        .footer-planet-button-div {
+            display: flex;
+            justify-content: center;
+        }
+        .footer-planet-button {
+            width: 309px;
+            height: 71px;
+        }
+        .header {
+            display: flex;
+            justify-content: center;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            width: 98%;
+        }
+        .header-top-cabinet {
+            width: 150px;
+        }
+        .header-top-changetheme {
+            width: 150px;
+        }
+        .header-top-logo {
+            display: flex;
+            flex-direction: row;
+        }
+        .header-top-logo h1{
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+        .header-top-cabinet {
+            display: flex;
+            align-items: center;
+        }
+        .header-top-cabinet-in {
+            display: flex;
+            flex-direction: row;
+            align-items: center
+        }
+        .cabinet-in-right {
+            margin-left: 20px;
+        }
+        .header-bottom {
+            background-color: #323232;
+            display: flex;
+            justify-content: center;
+        }
+        .header-bottom-second {
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            width: 98%;
+            height: 100px;
+        }
+        .header-bottom-main, .header-bottom-attractions, .header-bottom-routes, .header-bottom-pricingplans {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 200px;
+            margin: 30px;
+        }
+        .header-bottom-image {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <header>
+            <div class="header-top">
+                <div class="header-top-changetheme">
+                    <!-- active-button with animation(Anime js) -->
+                    <img src="" alt="">
+                </div>
+                <div class="header-top-logo">
+                    <img src="./images/Logo.svg" alt="">
+                    <h1>MapWay</h1>
+                </div>
+                <div class="header-top-cabinet">
+                    <!-- Личный кабинет, если человек зашэл на страницу -->
+                    <div class="header-top-cabinet-in">
+                        <div class=cabinet-in-left>
+                            <img src="./images/contacts.svg" alt="">
+                        </div>
+                        <div class="cabinet-in-right">
+                            <p>Олег Казаков</p>
+                        </div>
+                    </div>
+                    <div class="header-top-cabinet-out">
+                        <div class="header-top-singin"></div>
+                        <div class="header-top-signup"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-bottom">
+                <div class="header-bottom-second">
+                    <!-- Главная -->
+                    <a class="header-bottom-main" href="">
+                        <div class="header-bottom-image">
+                            <img src="./images/home.svg" alt="">
+                        </div>
+                        <div class="header-bottom-text">
+                            <p>Главная</p>
+                        </div>
+                    </a>
+                    <!-- Достопримечательности -->
+                    <a class=" header-bottom-attractions" href="">
+                        <div class="header-bottom-image">
+                            <img src="./images/festival.svg" alt="">
+                        </div>
+                        <div class="header-bottom-text">
+                            <p>Достопримечательности</p>
+                        </div>
+                    </a>
+                    <!-- Маршруты -->
+                    <a class="header-bottom-routes" href="">
+                        <div class="header-bottom-image">
+                            <img src="./images/map.svg" alt="">
+                        </div>
+                        <div class="header-bottom-text">
+                            <p>Маршруты</p>
+                        </div>
+                    </a>     
+                    <!-- Тарифы -->
+                    <a class="header-bottom-pricingplans" href="">
+                        <dic class="header-bottom-image">
+                            <img src="./images/monetization_on.svg" alt="">
+                        </dic>
+                        <div class="header-bottom-text">
+                            <p>Тарифы</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="main-second">
+                <div class="main-searcher">
+                    <div class="main-searcher-second">
+                        <h1>
+                            Постройте интересующий вас маршрут путешествия
+                        </h1>
+                    </div>
+                    <form class="main-searcher-form" action="">
+                        <div class="main-searcher-form-second">
+                            <div class="searcher-form-from">
+                                <div class="form-image"></div>
+                                <div class="form-from-input">
+                                    <input type="text" name="" id="">
+                                </div>
+                            </div>
+                            <div class="searcher-form-to">
+                                <div class="form-image"></div>
+                                <div class="form-to-input">
+                                    <input type="text" name="" id="">
+                                </div>
+                            </div>
+                            <div class="searcher-form-button">
+                                <button>
+                                    <p>
+                                        Построить маршрут
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="main-description">
+                    <div>
+                        <h1>Находите приключения, которые будут вам по душе</h1>
+                    </div>
+                    <div>
+                        <p>Наши алгоритмы нацелены выбирать лучшие маршруты до пункта назначения с учётом ваших предпочтений в путешествиях.</p>
+                    </div>
+                    <div>
+                        <button class="main-description-info">
+                            <p>
+                                Подробнее
+                            </p>
+                        </button>
+                        <button class="main-description-buy">
+                            <p>
+                                Купить подписку
+                            </p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <!-- 1 % для планеты можно скрывать -->
+            <div class="footer-planet">
+                <div class="footer-planet-second">
+                    <div class="footer-planet-header">
+                        <h1>
+                            1% для планеты
+                        </h1>
+                    </div>
+                    <div class="footer-planet-text">
+                        <div class="footer-planet-text-second">
+                            <p>
+                                Леса являются важнейшими экосистемами нашей планеты, которые оказывают существенное влияние на климатические процессы и биологические процессы. Также лес играет большую роль и в хозяйственной деятельности человека. В последнее время всё чаще можно услышать опасения экологов относительно будущего лесных массивов. Поэтому купите подписку, которая поможет лесу.
+                            </p>
+                        </div> 
+                    </div>
+                    <div class="footer-planet-button-div">
+                        <button class="footer-planet-button">
+                            <h2>
+                                Выбрать тариф
+                            </h2>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-main">
+                <div class="footer-main-second">
+                    <div class="footer-main-top">
+                        <div class="footer-main-leftpart">
+                            <div class="leftpart-header">
+                                <h1>
+                                    MapWay
+                                </h1>
+                            </div>
+                            <div class="leftpart-text">
+                                <p>
+                                    Сервис по подбору маршрутов, которые вам точно понравятся
+                                </p>
+                            </div>
+                            <div class="leftpart-sociallinks">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                        <div class="footer-main-rightpart">
+                            <div class="footer-main-maininfo">
+                                <div class="maininfo-head">
+                                    <h3>
+                                        Общая информация
+                                    </h3>
+                                </div>
+                                <div class="maininfo-links">
+                                    <a href="">
+                                        <p>О нас</p>
+                                    </a>
+                                    <a href="">
+                                        <p>Политика конфиденциальности</p>
+                                    </a>
+                                    <a href="">
+                                        <p>Использование данных</p>
+                                    </a>
+                                    <a href="">
+                                        <p>Почему именно мы?</p>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="footer-main-help">
+                                <div class="help-head">
+                                    <h3>
+                                        Помощь
+                                    </h3>
+                                </div>
+                                <div class="help-links">
+                                    <a href="">
+                                        <p>Контакты</p>
+                                    </a>
+                                    <a href="">
+                                        <p>Поддержка</p>
+                                    </a>
+                                    <a href="">
+                                        <p>Как пользоваться?</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-main-bootom">
+                        <!-- line -->
+                        <div>
+                            <hr>
+                        </div>
+                        <div class="footer-main-bottom-text">
+                            <p>2021 MapWay</p> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
