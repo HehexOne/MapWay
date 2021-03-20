@@ -138,6 +138,36 @@
         .header-bottom-image {
             margin-right: 10px;
         }
+        .main-searcher {
+            display: flex;
+            justify-content: center;
+            height: 300px;
+            margin-top: 50px;
+        }
+        .main-searcher-second {
+            width: 1219px;
+        }
+        .main-searcher-second h1 {
+            display: flex;
+            justify-content: center;
+        }
+        .main-searcher-form {
+            display: flex;
+            justify-content: center;
+        }
+        .main-searcher-form-second {
+            display: flex;
+            flex-direction: row;
+            width: 591px;
+            align-items: center;
+        }
+        .input-field {
+            width: 190px;
+            height: 50px;
+        }
+        .input-button {
+            height: 58px;
+        }
     </style>
 </head>
 <body>
@@ -213,42 +243,43 @@
             <div class="main-second">
                 <div class="main-searcher">
                     <div class="main-searcher-second">
+                        <!-- Не понимаю как сделать красивую ровную форму ввода -->
                         <h1>
                             Постройте интересующий вас маршрут путешествия
                         </h1>
+                        <form class="main-searcher-form" action="">
+                            <div class="main-searcher-form-second">
+                                <div class="searcher-form-from">
+                                    <div class="form-from-input">
+                                        <div class="form-image"></div>
+                                        <input class="input-field" type="text" name="" id="">
+                                    </div>
+                                </div>
+                                <div class="searcher-form-to">
+                                    <div class="form-to-input">
+                                        <div class="form-image"></div>
+                                        <input class="input-field" type="text" name="" id="">
+                                    </div>
+                                </div>
+                                <div class="searcher-form-button">
+                                    <button class="input-button">
+                                        <p>
+                                            Построить маршрут
+                                        </p>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <form class="main-searcher-form" action="">
-                        <div class="main-searcher-form-second">
-                            <div class="searcher-form-from">
-                                <div class="form-image"></div>
-                                <div class="form-from-input">
-                                    <input type="text" name="" id="">
-                                </div>
-                            </div>
-                            <div class="searcher-form-to">
-                                <div class="form-image"></div>
-                                <div class="form-to-input">
-                                    <input type="text" name="" id="">
-                                </div>
-                            </div>
-                            <div class="searcher-form-button">
-                                <button>
-                                    <p>
-                                        Построить маршрут
-                                    </p>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
                 <div class="main-description">
-                    <div>
+                    <div class="main-description-header">
                         <h1>Находите приключения, которые будут вам по душе</h1>
                     </div>
-                    <div>
+                    <div class="main-description-text">
                         <p>Наши алгоритмы нацелены выбирать лучшие маршруты до пункта назначения с учётом ваших предпочтений в путешествиях.</p>
                     </div>
-                    <div>
+                    <div class="main-description-buttons">
                         <button class="main-description-info">
                             <p>
                                 Подробнее
