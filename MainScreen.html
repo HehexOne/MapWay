@@ -42,7 +42,7 @@
         .footer-main-rightpart {
             display: flex;
             flex-direction:row;
-            margin-top: 20px;
+            margin-top: 50px;
         }
         .footer-main-maininfo {
             width: 340px;
@@ -141,15 +141,43 @@
         .main-searcher {
             display: flex;
             justify-content: center;
-            height: 300px;
             margin-top: 50px;
+            height: 600px;
         }
         .main-searcher-second {
             width: 1219px;
+            height: 454px;
+            background: url('./images/searcher_field_main.png');
+            background-position: center;
+            background-size: cover;
+            filter: drop-shadow(0px -4px 20px rgba(0, 0, 0, 0.35));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .main-searcher-second h1 {
+        .main-searcher-elements {
+            margin-bottom: 30px;
+        }
+        .main-searcher-elements h1 {
             display: flex;
             justify-content: center;
+
+            height: 51px;
+
+            font-family: Yeseva One;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 36px;
+            line-height: 48px;
+            /* or 133% */
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            color: #FFFFFF;
+            align-items: center;
         }
         .main-searcher-form {
             display: flex;
@@ -177,10 +205,6 @@
             display: flex;
             flex-direction: column;
             width: 1219px;
-        }
-        .main-description-header h1 {
-            width: 844px;
-            text-align: center;
         }
         .main-description-text p {
             width: 570px;
@@ -313,6 +337,119 @@
             justify-content: center;
             color: #FFFFFF;
         }
+        .header-top-logo h1 {
+            font-family: Yeseva One;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 40px;
+            line-height: 48px;
+            /* or 120% */
+
+
+            color: #323232;
+        }
+        .header-bottom-text {
+            font-family: Yeseva One;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 22px;
+            line-height: 65px;
+            /* or 269% */
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            color: #FFFFFF;
+        }
+        .header-bottom-second a {
+            text-decoration: none;
+        }
+        .header-bottom-routes {
+            margin-left: 120px;
+        }
+        .header-bottom-main {
+            margin-right: -20px;
+        }
+        .main-description-header h1 {
+            width: 820px;
+            height: 96px;
+
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 38px;
+            line-height: 48px;
+            /* or 126% */
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            color: #6A6B86;
+        }
+        .main-description-text p {
+            width: 570px;
+            height: 50px;
+
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 25px;
+            /* or 139% */
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            color: #000000;
+        }
+        .main-description-info {
+            width: 225px;
+            height: 49px;       
+
+            background: #FFFFFF;
+            border: 1px solid #6A6B86;
+            box-sizing: border-box;
+            border-radius: 5px;
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-description-info p{
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 48px;
+            /* identical to box height, or 320% */
+            color: #6A6B86;
+        } 
+        .main-description-buy {
+            width: 225px;
+            height: 49px;
+
+            background: #99CE26;
+            border: 1px solid #6C921A;
+            box-sizing: border-box;
+            border-radius: 5px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-description-buy p {
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 48px;
+            /* identical to box height, or 320% */
+
+            color: #FFFFFF;
+        }
     </style>
 </head>
 <body>
@@ -387,33 +524,35 @@
         <main>
             <div class="main-searcher">
                 <div class="main-searcher-second">
-                    <!-- Не понимаю как сделать красивую ровную форму ввода -->
-                    <h1>
-                        Постройте интересующий вас маршрут путешествия
-                    </h1>
-                    <form class="main-searcher-form" action="">
-                        <div class="main-searcher-form-second">
-                            <div class="searcher-form-from">
-                                <div class="form-from-input">
-                                    <div class="form-image"></div>
-                                    <input class="input-field" type="text" name="" id="">
+                    <div class="main-searcher-elements">
+                        <!-- Не понимаю как сделать красивую ровную форму ввода -->
+                        <h1>
+                            Постройте интересующий вас маршрут путешествия
+                        </h1>
+                        <form class="main-searcher-form" action="">
+                            <div class="main-searcher-form-second">
+                                <div class="searcher-form-from">
+                                    <div class="form-from-input">
+                                        <div class="form-image"></div>
+                                        <input class="input-field" type="text" name="" id="">
+                                    </div>
+                                </div>
+                                <div class="searcher-form-to">
+                                    <div class="form-to-input">
+                                        <div class="form-image"></div>
+                                        <input class="input-field" type="text" name="" id="">
+                                    </div>
+                                </div>
+                                <div class="searcher-form-button">
+                                    <button class="input-button">
+                                        <p>
+                                            Построить маршрут
+                                        </p>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="searcher-form-to">
-                                <div class="form-to-input">
-                                    <div class="form-image"></div>
-                                    <input class="input-field" type="text" name="" id="">
-                                </div>
-                            </div>
-                            <div class="searcher-form-button">
-                                <button class="input-button">
-                                    <p>
-                                        Построить маршрут
-                                    </p>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="main-description">
@@ -425,16 +564,16 @@
                         <p>Наши алгоритмы нацелены выбирать лучшие маршруты до пункта назначения с учётом ваших предпочтений в путешествиях.</p>
                     </div>
                     <div class="main-description-buttons">
-                        <button class="main-description-info">
+                        <div class="main-description-info">
                             <p>
                                 Подробнее
                             </p>
-                        </button>
-                        <button class="main-description-buy">
+                        </div>
+                        <div class="main-description-buy">
                             <p>
                                 Купить подписку
                             </p>
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
