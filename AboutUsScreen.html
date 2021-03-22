@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MainScreen</title>
+    <title>AboutUsScreen</title>
     <style>
         .main {
             position: absolute;
@@ -137,87 +137,6 @@
         }
         .header-bottom-image {
             margin-right: 10px;
-        }
-        .main-searcher {
-            display: flex;
-            justify-content: center;
-            margin-top: 50px;
-            height: 600px;
-        }
-        .main-searcher-second {
-            width: 1219px;
-            height: 454px;
-            background: url('./images/searcher_field_main.png');
-            background-position: center;
-            background-size: cover;
-            filter: drop-shadow(0px -4px 20px rgba(0, 0, 0, 0.35));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .main-searcher-elements {
-            margin-bottom: 30px;
-        }
-        .main-searcher-elements h1 {
-            display: flex;
-            justify-content: center;
-
-            height: 51px;
-
-            font-family: Yeseva One;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 36px;
-            line-height: 48px;
-            /* or 133% */
-
-            display: flex;
-            align-items: center;
-            text-align: center;
-
-            color: #FFFFFF;
-            align-items: center;
-        }
-        .main-searcher-form {
-            display: flex;
-            justify-content: center;
-        }
-        .main-searcher-form-second {
-            display: flex;
-            flex-direction: row;
-            width: 591px;
-            align-items: center;
-        }
-        .input-field {
-            width: 190px;
-            height: 50px;
-        }
-        .input-button {
-            height: 58px;
-        }
-        .main-description {
-            display: flex;
-            justify-content: center;
-            height: 383px;
-        }
-        .main-description-second {
-            display: flex;
-            flex-direction: column;
-            width: 1219px;
-        }
-        .main-description-text p {
-            width: 570px;
-            text-align: center;
-        }
-        .main-description-header, .main-description-text, .main-description-buttons {
-            display: flex;
-            justify-content: center;
-        }
-        .main-description-info, .main-description-buy {
-            width: 225px;
-            height: 49px;
-            margin: 25px;
         }
         .leftpart-header h1 {
             font-family: Yeseva One;
@@ -371,85 +290,6 @@
         .header-bottom-main {
             margin-right: -20px;
         }
-        .main-description-header h1 {
-            width: 820px;
-            height: 96px;
-
-            font-family: Roboto;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 38px;
-            line-height: 48px;
-            /* or 126% */
-
-            display: flex;
-            align-items: center;
-            text-align: center;
-
-            color: #6A6B86;
-        }
-        .main-description-text p {
-            width: 570px;
-            height: 50px;
-
-            font-family: Roboto;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 18px;
-            line-height: 25px;
-            /* or 139% */
-
-            display: flex;
-            align-items: center;
-            text-align: center;
-
-            color: #000000;
-        }
-        .main-description-info {
-            width: 225px;
-            height: 49px;       
-
-            background: #FFFFFF;
-            border: 1px solid #6A6B86;
-            box-sizing: border-box;
-            border-radius: 5px;
-            
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .main-description-info p{
-            font-family: Roboto;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 18px;
-            line-height: 48px;
-            /* identical to box height, or 320% */
-            color: #6A6B86;
-        } 
-        .main-description-buy {
-            width: 225px;
-            height: 49px;
-
-            background: #99CE26;
-            border: 1px solid #6C921A;
-            box-sizing: border-box;
-            border-radius: 5px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .main-description-buy p {
-            font-family: Roboto;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 18px;
-            line-height: 48px;
-            /* identical to box height, or 320% */
-
-            color: #FFFFFF;
-        }
     </style>
 </head>
 <body>
@@ -522,59 +362,42 @@
             </div>
         </header>
         <main>
-            <div class="main-searcher">
-                <div class="main-searcher-second">
-                    <div class="main-searcher-elements">
-                        <!-- Не понимаю как сделать красивую ровную форму ввода -->
-                        <h1>
-                            Постройте интересующий вас маршрут путешествия
-                        </h1>
-                        <form class="main-searcher-form" action="">
-                            <div class="main-searcher-form-second">
-                                <div class="searcher-form-from">
-                                    <div class="form-from-input">
-                                        <div class="form-image"></div>
-                                        <input class="input-field" type="text" name="" id="">
-                                    </div>
-                                </div>
-                                <div class="searcher-form-to">
-                                    <div class="form-to-input">
-                                        <div class="form-image"></div>
-                                        <input class="input-field" type="text" name="" id="">
-                                    </div>
-                                </div>
-                                <div class="searcher-form-button">
-                                    <button class="input-button">
-                                        <p>
-                                            Построить маршрут
-                                        </p>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+            <div class="main-header">
+                <h1>О нас</h1>
+            </div>
+            <div class="main-commerse">
+                <div class="main-text">
+                    <p>
+                        MapWay - это коммерческий проект для любителей путешествий по интересным местам. Данный ресурс поможет вам составить уникальный маршрут, включающий в себя достопримечательности и просто красивые места, которые вас точно заинтересуют!
+                    </p>
+                </div>
+                <div class="main-image">
+                    <img src="./images/knapsack.svg" alt="">
                 </div>
             </div>
-            <div class="main-description">
-                <div class="main-description-second">
-                    <div class="main-description-header">
-                        <h1>Находите приключения, которые будут вам по душе</h1>
-                    </div>
-                    <div class="main-description-text">
-                        <p>Наши алгоритмы нацелены выбирать лучшие маршруты до пункта назначения с учётом ваших предпочтений в путешествиях.</p>
-                    </div>
-                    <div class="main-description-buttons">
-                        <div class="main-description-info">
-                            <p>
-                                Подробнее
-                            </p>
-                        </div>
-                        <div class="main-description-buy">
-                            <p>
-                                Купить подписку
-                            </p>
-                        </div>
-                    </div>
+            <div class="main-howwork">
+                <div class="main-image">
+                    <img src="./images/AboutUsMap.svg" alt="">
+                </div>
+                <div class="main-text">
+                    <p>
+                        Принцип работы сайта очень прост: мы узнаём, что именно вам нравится, вы составляете маршрут от одной точки к другой и наш алгоритм находит места, которые могут быть вам интересны на пути. Вы можете зайти на страницу каждой достопримечательности и точно решить, хотите ли вы посетить её или нет. А если вам понравится, то можете оставить отзыв для других пользователей. 
+                    </p>
+                </div>
+            </div>
+            <div class="main-beforework">
+                <div class="main-text">
+                    <p>
+                        Чтобы начать работу с сайтом, вам нужно зарегистрироваться с помощью электронной почты, а после зайти во вкладку “Маршруты” , выбрать, откуда и куда выхотите и начать поиск. Мы уверены, что с помощью алгоритмов нашего сайта ваше путешествие останется в памяти ещё надолго!
+                    </p>
+                </div>
+                <div class="main-image">
+                    <img src="./images/traveller 1.svg" alt="">
+                </div>
+            </div>
+            <div class="main-button-field">
+                <div class="main-button">
+                    <p>Построить свой первый маршрут</p>
                 </div>
             </div>
         </main>
@@ -632,7 +455,7 @@
                                     </h3>
                                 </div>
                                 <div class="maininfo-links">
-                                    <a href="./aboutUsScreen.html">
+                                    <a href="./AboutUs.html">
                                         <p>О нас</p>
                                     </a>
                                     <a href="">
