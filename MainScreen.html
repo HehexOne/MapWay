@@ -168,6 +168,151 @@
         .input-button {
             height: 58px;
         }
+        .main-description {
+            display: flex;
+            justify-content: center;
+            height: 383px;
+        }
+        .main-description-second {
+            display: flex;
+            flex-direction: column;
+            width: 1219px;
+        }
+        .main-description-header h1 {
+            width: 844px;
+            text-align: center;
+        }
+        .main-description-text p {
+            width: 570px;
+            text-align: center;
+        }
+        .main-description-header, .main-description-text, .main-description-buttons {
+            display: flex;
+            justify-content: center;
+        }
+        .main-description-info, .main-description-buy {
+            width: 225px;
+            height: 49px;
+            margin: 25px;
+        }
+        .leftpart-header h1 {
+            font-family: Yeseva One;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 64px;
+            line-height: 24px;
+            color: #FFFFFF;
+        }
+        .leftpart-text p {
+            font-family: Roboto Slab;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 24px;
+            /* or 133% */
+
+            display: flex;
+            align-items: center;
+
+            color: #D4D4D4;
+        }
+        .maininfo-head h3, .help-head h3 {
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 24px;
+            /* or 133% */
+
+            display: flex;
+            align-items: center;
+
+            color: #FFFFFF;
+        }
+        .maininfo-links a, .help-links a {
+            text-decoration: none;
+        }
+        .maininfo-links a p, .help-links a p {
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 24px;
+            /* or 133% */
+
+            display: flex;
+            align-items: center;
+
+            color: #D5D5D5;
+        }
+        .footer-main-bottom-line {
+            width: 990px;
+            height: 0px;
+
+            border: 1px solid #FFFFFF;
+        }
+        .footer-main-bottom-text p {
+            font-family: Yeseva One;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 24px;
+            /* or 133% */
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            color: #FFFFFF;
+
+        }
+        .footer-planet-header h1 {
+            font-family: Yeseva One;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 60px;
+            line-height: 48px;
+            /* identical to box height, or 80% */
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            color: #FFFFFF;
+        }
+        .footer-planet-text-second p {
+            font-family: Roboto Slab;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 20px;
+            /* or 111% */
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            color: #FFFFFF;
+        }
+        .footer-planet-button {
+            border: 4px solid #FFFFFF;
+            box-sizing: border-box;
+            border-radius: 10px;
+            background-color: #379028;
+
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 48px;
+            /* identical to box height, or 160% */
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            color: #FFFFFF;
+        }
     </style>
 </head>
 <body>
@@ -240,39 +385,39 @@
             </div>
         </header>
         <main>
-            <div class="main-second">
-                <div class="main-searcher">
-                    <div class="main-searcher-second">
-                        <!-- Не понимаю как сделать красивую ровную форму ввода -->
-                        <h1>
-                            Постройте интересующий вас маршрут путешествия
-                        </h1>
-                        <form class="main-searcher-form" action="">
-                            <div class="main-searcher-form-second">
-                                <div class="searcher-form-from">
-                                    <div class="form-from-input">
-                                        <div class="form-image"></div>
-                                        <input class="input-field" type="text" name="" id="">
-                                    </div>
-                                </div>
-                                <div class="searcher-form-to">
-                                    <div class="form-to-input">
-                                        <div class="form-image"></div>
-                                        <input class="input-field" type="text" name="" id="">
-                                    </div>
-                                </div>
-                                <div class="searcher-form-button">
-                                    <button class="input-button">
-                                        <p>
-                                            Построить маршрут
-                                        </p>
-                                    </button>
+            <div class="main-searcher">
+                <div class="main-searcher-second">
+                    <!-- Не понимаю как сделать красивую ровную форму ввода -->
+                    <h1>
+                        Постройте интересующий вас маршрут путешествия
+                    </h1>
+                    <form class="main-searcher-form" action="">
+                        <div class="main-searcher-form-second">
+                            <div class="searcher-form-from">
+                                <div class="form-from-input">
+                                    <div class="form-image"></div>
+                                    <input class="input-field" type="text" name="" id="">
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                            <div class="searcher-form-to">
+                                <div class="form-to-input">
+                                    <div class="form-image"></div>
+                                    <input class="input-field" type="text" name="" id="">
+                                </div>
+                            </div>
+                            <div class="searcher-form-button">
+                                <button class="input-button">
+                                    <p>
+                                        Построить маршрут
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="main-description">
+            </div>
+            <div class="main-description">
+                <div class="main-description-second">
                     <div class="main-description-header">
                         <h1>Находите приключения, которые будут вам по душе</h1>
                     </div>
@@ -311,11 +456,11 @@
                         </div> 
                     </div>
                     <div class="footer-planet-button-div">
-                        <button class="footer-planet-button">
+                        <div class="footer-planet-button">
                             <h2>
                                 Выбрать тариф
                             </h2>
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -384,8 +529,7 @@
                     </div>
                     <div class="footer-main-bootom">
                         <!-- line -->
-                        <div>
-                            <hr>
+                        <div class="footer-main-bottom-line">
                         </div>
                         <div class="footer-main-bottom-text">
                             <p>2021 MapWay</p> 
