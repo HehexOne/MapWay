@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -290,6 +290,95 @@
         .header-bottom-main {
             margin-right: -20px;
         }
+        main {
+            display: flex;
+            justify-content: center;
+        }
+        .main-second {
+            display: flex;
+            flex-direction: column;
+            width: 1280px;
+        }
+        .main-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .main-commerse {
+            display: flex;
+            flex-direction: row;
+        }
+        .main-howwork {
+            display: flex;
+            flex-direction: row;
+        }
+        .main-beforework {
+            display: flex;
+            flex-direction: row;
+        }
+        .main-text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 1100px;
+        }
+        .main-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-text p {
+            width: 802px;
+            height: 259px;
+
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 30px;
+            line-height: 37px;
+            /* or 123% */
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+            letter-spacing: -1px;
+
+        }
+        .main-button-field {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-button {
+            width: 475px;
+            height: 58px;
+
+            background: #99CE26;
+            border: 1.34226px solid #6C921A;
+            box-sizing: border-box;
+            border-radius: 6.71131px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            margin-top: 70px;
+            margin-bottom: 110px;
+        }
+        .main-button p {
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 30px;
+            line-height: 30px;
+            /* identical to box height, or 100% */
+            letter-spacing: -1px;
+
+            color: #FFFFFF;
+        }
+        .main-text-greencolor {
+            color: #99CE26;
+        }
     </style>
 </head>
 <body>
@@ -362,42 +451,44 @@
             </div>
         </header>
         <main>
-            <div class="main-header">
-                <h1>О нас</h1>
-            </div>
-            <div class="main-commerse">
-                <div class="main-text">
-                    <p>
-                        MapWay - это коммерческий проект для любителей путешествий по интересным местам. Данный ресурс поможет вам составить уникальный маршрут, включающий в себя достопримечательности и просто красивые места, которые вас точно заинтересуют!
-                    </p>
+            <div class="main-second">
+                <div class="main-header">
+                    <h1>О нас</h1>
                 </div>
-                <div class="main-image">
-                    <img src="./images/knapsack.svg" alt="">
+                <div class="main-commerse">
+                    <div class="main-text">
+                        <p>
+                            <!--<span class="main-text-greencolor"> -->MapWay <!--</span> --> - это коммерческий проект для любителей <!-- <span class="main-text-greencolor">-->путешествий<!--</span> --> по интересным местам. Данный ресурс поможет вам составить уникальный <!--<span class="main-text-greencolor"> -->маршрут<!--</span>-->, включающий в себя достопримечательности и просто красивые места, которые вас точно заинтересуют!
+                        </p>
+                    </div>
+                    <div class="main-image">
+                        <img src="./images/knapsack.svg" alt="">
+                    </div>
                 </div>
-            </div>
-            <div class="main-howwork">
-                <div class="main-image">
-                    <img src="./images/AboutUsMap.svg" alt="">
+                <div class="main-howwork">
+                    <div class="main-image">
+                        <img src="./images/AboutUsMap.svg" alt="">
+                    </div>
+                    <div class="main-text">
+                        <p>
+                            Принцип работы сайта очень прост: мы узнаём, что именно <!--<span class="main-text-greencolor"> -->вам нравится <!--</span> -->, вы составляете маршрут от одной точки к другой и наш алгоритм находит места, которые могут быть вам интересны на пути. Вы можете зайти на страницу каждой достопримечательности и точно решить, хотите ли вы посетить её или нет. А если вам понравится, то можете оставить отзыв для других пользователей. 
+                        </p>
+                    </div>
                 </div>
-                <div class="main-text">
-                    <p>
-                        Принцип работы сайта очень прост: мы узнаём, что именно вам нравится, вы составляете маршрут от одной точки к другой и наш алгоритм находит места, которые могут быть вам интересны на пути. Вы можете зайти на страницу каждой достопримечательности и точно решить, хотите ли вы посетить её или нет. А если вам понравится, то можете оставить отзыв для других пользователей. 
-                    </p>
+                <div class="main-beforework">
+                    <div class="main-text">
+                        <p>
+                            Чтобы начать работу с сайтом, вам нужно зарегистрироваться с помощью электронной почты, а после зайти во вкладку “Маршруты” , выбрать, откуда и куда выхотите и начать поиск. Мы уверены, что с помощью алгоритмов нашего сайта ваше <!--<span class="main-text-greencolor"> -->путешествие останется в памяти ещё надолго! <!--</span> -->
+                        </p>
+                    </div>
+                    <div class="main-image">
+                        <img src="./images/traveller 1.svg" alt="">
+                    </div>
                 </div>
-            </div>
-            <div class="main-beforework">
-                <div class="main-text">
-                    <p>
-                        Чтобы начать работу с сайтом, вам нужно зарегистрироваться с помощью электронной почты, а после зайти во вкладку “Маршруты” , выбрать, откуда и куда выхотите и начать поиск. Мы уверены, что с помощью алгоритмов нашего сайта ваше путешествие останется в памяти ещё надолго!
-                    </p>
-                </div>
-                <div class="main-image">
-                    <img src="./images/traveller 1.svg" alt="">
-                </div>
-            </div>
-            <div class="main-button-field">
-                <div class="main-button">
-                    <p>Построить свой первый маршрут</p>
+                <div class="main-button-field">
+                    <div class="main-button">
+                        <p>Построить свой первый маршрут</p>
+                    </div>
                 </div>
             </div>
         </main>
