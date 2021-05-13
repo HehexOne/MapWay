@@ -14,8 +14,8 @@ CREATE TABLE User (
 CREATE TABLE Object (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(256),
-    longitude INT,
-    latitude INT,
+    longitude DOUBLE,
+    latitude DOUBLE,
     image_url VARCHAR(256),
     description VARCHAR(2048),
     rating FLOAT UNSIGNED,
