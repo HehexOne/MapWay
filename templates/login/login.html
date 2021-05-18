@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            background: url("{{ url_for('static', filename='login_background.jpg') }}") center center / cover no-repeat;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .error-block {
+            background-color: #ffd5dc;
+            border: 2px solid #ffc0c0;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<div style="width: 100%;" class="columns">
+    <div class="column"></div>
+    <div class="column">
+        {% if errors %}
+        <div style="margin-bottom: 10px;" class="card">
+            <div class="card-content error-block">
+                {% for error in errors %}
+                <p style="margin: 2px;">{{ error }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="card">
+            <div class="card-header">
+                <div style="display: block; margin: 10px" class="card-header-title">
+                    <h1 class="title">MapWay</h1>
+                    <p style="top: -10px;" class="subtitle">Авторизация</p>
+                </div>
+            </div>
+            <div class="card-content">
+                <form action="" method="post">
+                    {{ form.csrf_token() }}
+                    {{ form.username }}<br><br>
+                    {{ form.password }}<br><br>
+                    {{ form.submit }}
+                    <a class="button is-medium is-outlined" href="/register">Регистрация</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="column"></div>
+</div>
+</body>
+</html>
