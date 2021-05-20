@@ -1,9 +1,10 @@
-DROP TABLE ObjectInRoute, Route, ObjectTag, Tag, Review,
+DROP TABLE Review, ObjectInRoute, Route, ObjectTag, Tag,
     ObjectCategory, Category, Object, User;
 
 CREATE TABLE User (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(64),
+    name VARCHAR(128),
+    surname VARCHAR(128),
     email VARCHAR(128),
     password_hash VARCHAR(256),
     rights_level INT UNSIGNED,
@@ -36,16 +37,6 @@ CREATE TABLE ObjectCategory (
     FOREIGN KEY (category_id) REFERENCES Category(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE Review (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED,
-    object_id INT UNSIGNED,
-    text VARCHAR(1024),
-    rating INT UNSIGNED,
-    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (object_id) REFERENCES Object(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
 CREATE TABLE Tag (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(32)
@@ -74,4 +65,14 @@ CREATE TABLE ObjectInRoute (
     route_id INT UNSIGNED,
     FOREIGN KEY (object_id) REFERENCES Object(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (route_id) REFERENCES Route(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Review (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    object_in_route INT UNSIGNED,
+    object_id INT UNSIGNED,
+    text VARCHAR(1024),
+    rating INT UNSIGNED,
+    FOREIGN KEY (object_in_route) REFERENCES ObjectInRoute(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (object_id) REFERENCES Object(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

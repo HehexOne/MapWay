@@ -33,28 +33,37 @@
     <div class="column"></div>
     <div class="column">
         {% if errors %}
-        <div style="margin-bottom: 10px;" class="card">
-            <div class="card-content error-block">
-                {% for error in errors %}
-                <p style="margin: 2px;">{{ error }}</p>
-                {% endfor %}
+            <div style="margin-bottom: 10px;" class="card">
+                <div class="card-content error-block">
+                    {% for error in errors %}
+                        <p style="margin: 2px;">{{ error }}</p>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
         {% endif %}
         <div class="card">
             <div class="card-header">
                 <div style="display: block; margin: 10px" class="card-header-title">
                     <h1 class="title">MapWay</h1>
-                    <p style="top: -10px;" class="subtitle">Авторизация</p>
+                    <p style="top: -10px;" class="subtitle">Регистрация</p>
                 </div>
             </div>
             <div class="card-content">
                 <form action="" method="post">
                     {{ form.csrf_token() }}
+                    {{ form.name }}<br><br>
+                    {{ form.surname }}<br><br>
+                    <label class="label">День рождения:</label>
+                    {{ form.birthday }}<br><br>
                     {{ form.email }}<br><br>
                     {{ form.password }}<br><br>
+                    {{ form.password_repeat }}<br><br>
+                    <label class="checkbox">
+                        {{ form.pc_agreement }} Соглашаюсь с условиями
+                    сервиса
+                    </label><br><br>
                     {{ form.submit }}
-                    <a class="button is-medium is-outlined" href="/registration">Регистрация</a>
+                    <a class="button is-medium is-outlined" href="/login">Вход</a>
                 </form>
             </div>
         </div>
