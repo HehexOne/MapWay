@@ -54,7 +54,7 @@
                     {{ form.name }}<br><br>
                     {{ form.surname }}<br><br>
                     <label class="label">День рождения:</label>
-                    {{ form.birthday }}<br><br>
+                    {{ form.birthday(min="1905-01-01", max=three_years_ago) }}<br><br>
                     {{ form.email }}<br><br>
                     {{ form.password }}<br><br>
                     {{ form.password_repeat }}<br><br>

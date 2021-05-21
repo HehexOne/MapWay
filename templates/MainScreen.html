@@ -465,13 +465,13 @@
                     <h1>MapRoute</h1>
                 </div>
                 <div class="header-top-cabinet">
-                    <!-- Личный кабинет, если человек зашэл на страницу -->
+                    <!-- Личный кабинет, если человек зашёл на страницу -->
                     <div class="header-top-cabinet-in">
                         <div class=cabinet-in-left>
                             <img src="../static/images/contacts.svg" alt="">
                         </div>
                         <div class="cabinet-in-right">
-                            <p>Олег Казаков</p>
+                            <a style="margin: 5px; display: inline" href="/logout">{{ user.surname }} {{ user.name }}</a>
                         </div>
                     </div>
                     <div class="header-top-cabinet-out">

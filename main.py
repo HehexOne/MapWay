@@ -7,6 +7,8 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateF
 from wtforms.validators import DataRequired, Length, EqualTo
 from mysql.connector import connect
 from hashlib import sha256
+import datetime
+from database_structures_and_functions import *
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "sup3rsecr3tp@ssw0rd"
@@ -14,41 +16,6 @@ connection = connect(host="std-mysql", username="std_1450_mw", password="1122334
 db = connection.cursor()
 db.execute("USE std_1450_mw;")
 connection.commit()
-
-
-class User:
-
-    def __init__(self, id, name, surname, email, password_hash, rights_level, subscription_level, birthday):
-        self.id = id
-        self.name = name
-        self.surname = surname
-        self.email = email
-        self.password_hash = password_hash
-        self.right_level = rights_level
-        self.subscription_level = subscription_level
-        self.birthday = birthday
-
-
-def create_user_by_user_object(user_obj: User):
-    query = f"INSERT INTO User (name, surname, email, password_hash, rights_level, subscription_level, birthday)" \
-            f"VALUES ('{user_obj.name}', '{user_obj.surname}', '{user_obj.email}', '{user_obj.password_hash}'," \
-            f"{user_obj.right_level}, {user_obj.subscription_level}, '{user_obj.birthday}');"
-    db.execute(query)
-    connection.commit()
-    db.execute("SELECT LAST_INSERT_ID()")
-    return db.fetchone()
-
-
-def get_user_by_credentials(email, password):
-    password_hash = sha256(password.encode("utf-8")).hexdigest()
-    query = f"SELECT * FROM User WHERE email='{email}' AND password_hash='{password_hash}' LIMIT 1"
-    db.execute(query)
-    result = db.fetchone()
-    if result:
-        # Converting database response to object
-        return User(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
-    else:
-        return None
 
 
 def login_required(f):
@@ -112,7 +79,8 @@ class RegisterForm(FlaskForm):
 @app.route("/")
 @login_required
 def index():
-    return "<a href='/logout'>Выйти</a><br>Hello, world"
+    user = get_user_by_id(session['id'])
+    return render_template("MainScreen.html", user=user)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -136,6 +104,7 @@ def login():
 
 @app.route("/registration", methods=["GET", "POST"])
 def registration():
+    three_years_ago = datetime.datetime.now() - datetime.timedelta(days=3*365)
     form = RegisterForm()
     our_errors = list()
     if form.validate_on_submit():
@@ -157,7 +126,7 @@ def registration():
         errors += tuple(our_errors)
     else:
         errors += our_errors
-    return render_template("login/registration.html", form=form, errors=errors)
+    return render_template("login/registration.html", form=form, errors=errors, three_years_ago=three_years_ago.date())
 
 
 @app.route("/logout")
