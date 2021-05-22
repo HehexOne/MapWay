@@ -242,3 +242,23 @@ def get_route_by_id(ident):
                      result[3])
     else:
         return None
+
+
+def create_route_by_route_object(route_object: Route):
+    query = f"INSERT INTO Route (user_id, date, rating) " \
+            f"VALUES ({route_object.user_id}, '{route_object.date}', {route_object.rating})"
+    return insert_query_get_id(query)
+
+
+def get_tag_by_id(ident):
+    query = f"SELECT * FROM Tag WHERE id={ident}"
+    result = select_query_fetchone(query)
+    if result:
+        return Tag(result[0], result[1])
+    else:
+        return None
+
+
+def create_tag_by_tag_object(tag_object: Tag):
+    query = f"INSERT INTO Tag (name) VALUES ('{tag_object.name}')"
+    return insert_query_get_id(query)
