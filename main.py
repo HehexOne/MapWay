@@ -80,7 +80,30 @@ class RegisterForm(FlaskForm):
 @login_required
 def index():
     user = get_user_by_id(session['id'])
-    return render_template("MainScreen.html", user=user)
+    return render_template("new/MainPage.html", user=user)
+
+
+@app.route("/about")
+@login_required
+def about():
+    user = get_user_by_id(session['id'])
+    return render_template("new/AboutUs.html", user=user)
+
+
+@app.route("/object<int:ident>")
+@login_required
+def object(ident):
+    user = get_user_by_id(session['id'])
+    object_from_db = get_object_by_id(ident)
+    # if not object_from_db:
+    #     return redirect(url_for("not_found"))
+    return render_template("new/Object.html", user=user, object=object_from_db)
+
+
+@app.errorhandler(404)
+@app.route("/not_found")
+def not_found():
+    return "Not found!", 404
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -116,7 +139,6 @@ def registration():
                         0,
                         0,
                         form.birthday.data)
-        print(new_user.birthday)
         session['id'] = create_user_by_user_object(new_user)
         return redirect(url_for("index"))
     errors = form.name.errors + form.surname.errors + form.email.errors + \
