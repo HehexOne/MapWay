@@ -131,28 +131,7 @@ class MapWay:
             TODO: Закэшировать все расстояния между объектами, чтобы потом не делать запросы на сервера
             использую алгоритм построения минимального остового дерева (Алгоритм Прима)
         '''
-        import math
-        import heapq
-        import random
-        way = [start, end]
-        if points == None:
-            return way
-        way.append(points)
-
-        matrix = [[math.inf] for i in range(len(way))]
-
-        for i in range(len(matrix)):
-            for j in range(len(matrix)):
-                matrix[i][j] = getLength(())
-
-        key = [math.inf] * len(way)
-        p = [None] * len(way)
-        r = random.randint(0, len(matrix))
-        key[r] = 0
-
-        Q = way
-        heapq.heapify(Q)
-
+        
     def inZone(self,
                first_point=None,
                second_point=None):
@@ -250,6 +229,14 @@ class MapWay:
                 return False
 
         '''
+        import mysql.connector
+
+        mydb = mysql.connector.connect(
+            host='std-mysql',
+            user='std_1455_map_way',
+            passwd='12345678',
+            database='std_1455_map_way'
+        )
         query = f"SELECT * FROM Place WHERE ({left_point.position.latitude} >= {right_point.position.latitude} and (Place.longtitude <= {right_point.position.longtitude} and (Place.longtitude >= {left_point.position.longtitude} and Place.latitude <= {left_point.position.latitude} and Place.latitude >= {right_point.position.latitude})) or ({left_point.position.latitude} < {right_point.position.latitude} and (Place.longtitude <= {right_point.position.longtitude} and Place.longtitude >= {left_point.position.longtitude} and Place.latitude <= {right_point.position.latitude} and Place.latitude >= {left_point.position.latitude})));"
 
         mycursor = mydb.cursor()
@@ -345,12 +332,6 @@ class MapWay:
     #     return False
 
 
-class WorkWithDB:
-
-    def __init__(self):
-        pass
-
-
 class User:
 
     def __init__(self,
@@ -370,14 +351,19 @@ class User:
     def getCategory(self):
         return self.category
 
+class WorkWithDB:
 
-class GraphType:
+    def __init__(self):
+        pass
 
-    def __init__(self,
-                 length=None,
-                 vertex_number=None):
-        self.length = length
-        self.vertex_number = vertex_number
+#
+# class GraphType:
+#
+#     def __init__(self,
+#                  length=None,
+#                  vertex_number=None):
+#         self.length = length
+#         self.vertex_number = vertex_number
 
 
 class Position:
