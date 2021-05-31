@@ -1,3 +1,8 @@
+import math
+from collections import deque
+import mysql.connector
+from HashTable import HashTable
+
 class MapWay:
 
     def __init__(self,
@@ -6,24 +11,38 @@ class MapWay:
                  current_position=None,
                  points=None,
                  model=None,
-                 places=None):
-        import math
+                 places=None,
+                 user_points=None):
         self.nameAlgo = nameAlgo
         self.arrAsks = arrAsks
         self.points = points
         self.model = model
         self.places = places
         self.infinity = math.inf
+        self.user_points = user_points
+        self.mydb = mysql.connector.connect(
+            host='std-mysql',
+            user='std_1455_map_way',
+            passwd='12345678',
+            database='std_1455_map_way'
+        )
 
-    def findBestWay(self, user=None, points=None):
+    def findBestWay(self,
+                    user=None,
+                    points=None):
         '''
         user: пользователь для которого мы анализируем
         points: пока что массив на две точки
         [0]: начальная
-        [1]: конечная
+        [1]: промежуточная
+        [n]: конечная
         '''
-        import math
-        from collections import deque
+
+        all_points = self.getBorderPoints(points=points)
+        self.user_points = HashTable(len(all_points))
+        for i in all_points:
+            self.user_points.set_val(str(all_points[0].id), 0)
+
         # поиск объектов, которые попадают под интересующую нас зону
 
         '''
@@ -43,84 +62,97 @@ class MapWay:
             Добавление начальной и конечной точки,
             можно будет добавить промежуточную
         '''
-        places_in_zone = self.inZone(points[0], points[1])
-        for point in points:
-            places_in_zone.append(point)
-        '''
-        Построение графа исходя из модели
-
-        1) Возьмём и посмотрим насколько подходит пользователю каждое место из предложенных,
-            для этого будем использовать ранг каждого места для посетителя, рачитывать его мы будем по формуле,
-            { Формулу я ещё не придумал }
-
-        '''
-        self.matrix_size_x = len(places_in_zone)
-        matrix_places = [[0] * self.matrix_size_x for _ in range(self.matrix_size_x)]
-
-        for i in range(self.matrix_size_x):
-            for j in range(self.matrix_size_x):
-                '''
-                    Добаляю расстояния в матрицу
-
-                    !!!!  Здесь нам надо будет брать время,
-                    которое понадобится для прохода из
-                    одной точки в другую с яндекс карт  !!!!
-
-                    Расстояние думаю лучше измерять во времени, которое человек затратит на путь
-                '''
-                if (((places_in_zone[i].category == 'Start_point' and places_in_zone[j] == 'End_point') or
-                     (places_in_zone[i].category == 'End_point' and places_in_zone[j] == 'Start_point')) and
-                        self.matrix_size_x > 2):
-                    matrix_places[i][j] = math.inf
-                else:
-                    matrix_places[i][j] = self.getLength(places_in_zone[i], places_in_zone[j])
-
-        '''
-
-        S
-         \
-          \
-           \
-            *-------E
-
-        Буду использовать алгоритм дейкстры для поиска пути, но буду так же искать по точке,
-        которая больше всего нравится пользователю и по времени до конца
-        '''
-
-        start_point = len(matrix_places) - len(points)
-        end_point = len(matrix_places) - 1
-        dist = [math.inf] * len(matrix_places)
-        way = [0] * len(matrix_places)
-        way[start_point] = 0
-        dist[0] = 0
-        Q = deque()
-        Q.append(len(places_in_zone) - len(points))
-        while Q:
-            v = Q.pop()
-            for u in range(len(matrix_places[v])):
-                if (dist[u] > dist[v] + matrix_places[v][u]):
-                    dist[u] = dist[v] + matrix_places[v][u]
-                    way[u] = v
-                    Q.append(u)
-
-        '''
-
-                Чтобы восстановить оптимальный путь от
-                начальной вершины до коненой нам нужно просто смотреть на массив
-                в котором у нас записаны минимальные расстояния до начальной вершины
-                Мы будем жадно брать самое маленькое значение
-
-        '''
-
-        road = [end_point]
-        now_point = end_point
-        while way[now_point] != now_point:
-            now_point = way[end_point]
-            road.append(now_point)
-
+        start_point = points[0]
+        end_point = points[1]
         ans = [points[0]]
-        for i in list(reversed(road)):
-            ans.append(places_in_zone[i])
+        for m in range(1, len(points)):
+            places_in_zone = self.inZone(first_point=start_point, second_point=end_point)
+            start_point.category, end_point.category= 'Start_point', 'End_point'
+            places_in_zone.append(start_point)
+            places_in_zone.append(end_point)
+            '''
+            Построение графа исходя из модели
+
+            1) Возьмём и посмотрим насколько подходит пользователю каждое место из предложенных,
+                для этого будем использовать ранг каждого места для посетителя, рачитывать его мы будем по формуле,
+                { Формулу я ещё не придумал }
+
+            '''
+            self.matrix_size_x = len(places_in_zone)
+            matrix_places = [[0] * self.matrix_size_x for _ in range(self.matrix_size_x)]
+
+            for i in range(self.matrix_size_x):
+                for j in range(self.matrix_size_x):
+                    '''
+                        Добаляю расстояния в матрицу
+
+                        !!!!  Здесь нам надо будет брать время,
+                        которое понадобится для прохода из
+                        одной точки в другую с яндекс карт  !!!!
+
+                        Расстояние думаю лучше измерять во времени, которое человек затратит на путь
+                    '''
+                    if (((places_in_zone[i].category == 'Start_point' and places_in_zone[j] == 'End_point') or
+                         (places_in_zone[i].category == 'End_point' and places_in_zone[j] == 'Start_point')) and
+                            self.matrix_size_x > 2):
+                        matrix_places[i][j] = math.inf
+                    elif self.user_points.get_val(i) != 0 or self.user_points.get_val(j) != 0:
+                        matrix_places[i][j] = math.inf
+                    else:
+                        matrix_places[i][j] = self.getLength(places_in_zone[i], places_in_zone[j])
+
+            '''
+
+            S
+             \
+              \
+               \
+                *-------E
+
+            Буду использовать алгоритм дейкстры для поиска пути, но буду так же искать по точке,
+            которая больше всего нравится пользователю и по времени до конца
+            '''
+
+            start_point = len(matrix_places) - len(points)
+            end_point = len(matrix_places) - 1
+            dist = [math.inf] * len(matrix_places)
+            way = [0] * len(matrix_places)
+            way[start_point] = 0
+            dist[0] = 0
+            Q = deque()
+            Q.append(len(places_in_zone) - len(points))
+            while Q:
+                v = Q.pop()
+                for u in range(len(matrix_places[v])):
+                    if (dist[u] > dist[v] + matrix_places[v][u]):
+                        dist[u] = dist[v] + matrix_places[v][u]
+                        way[u] = v
+                        Q.append(u)
+
+            '''
+
+                    Чтобы восстановить оптимальный путь от
+                    начальной вершины до коненой нам нужно просто смотреть на массив
+                    в котором у нас записаны минимальные расстояния до начальной вершины
+                    Мы будем жадно брать самое маленькое значение
+
+            '''
+
+            road = [end_point]
+            now_point = end_point
+            while way[now_point] != now_point:
+                if places_in_zone[now_point].id != None:
+                    self.user_points.set_val(places_in_zone[now_point].id, 1)
+                now_point = way[end_point]
+                road.append(now_point)
+
+
+            for i in list(reversed(road)):
+                ans.append(places_in_zone[i])
+
+            if i < len(points) - 1:
+                start_point = points[m]
+                end_point = points[m + 1]
         return ans
 
     def all_pinned_points(self,
@@ -131,7 +163,7 @@ class MapWay:
             TODO: Закэшировать все расстояния между объектами, чтобы потом не делать запросы на сервера
             использую алгоритм построения минимального остового дерева (Алгоритм Прима)
         '''
-        
+
     def inZone(self,
                first_point=None,
                second_point=None):
@@ -229,22 +261,61 @@ class MapWay:
                 return False
 
         '''
-        import mysql.connector
-
-        mydb = mysql.connector.connect(
-            host='std-mysql',
-            user='std_1455_map_way',
-            passwd='12345678',
-            database='std_1455_map_way'
-        )
-        query = f"SELECT * FROM Place WHERE ({left_point.position.latitude} >= {right_point.position.latitude} and (Place.longtitude <= {right_point.position.longtitude} and (Place.longtitude >= {left_point.position.longtitude} and Place.latitude <= {left_point.position.latitude} and Place.latitude >= {right_point.position.latitude})) or ({left_point.position.latitude} < {right_point.position.latitude} and (Place.longtitude <= {right_point.position.longtitude} and Place.longtitude >= {left_point.position.longtitude} and Place.latitude <= {right_point.position.latitude} and Place.latitude >= {left_point.position.latitude})));"
-
-        mycursor = mydb.cursor()
+        query = f'SELECT * FROM Place WHERE ({left_point.position.latitude} >= {right_point.position.latitude} and (Place.longtitude <= {right_point.position.longtitude} and (Place.longtitude >= {left_point.position.longtitude} and Place.latitude <= {left_point.position.latitude} and Place.latitude >= {right_point.position.latitude})) or ({left_point.position.latitude} < {right_point.position.latitude} and (Place.longtitude <= {right_point.position.longtitude} and Place.longtitude >= {left_point.position.longtitude} and Place.latitude <= {right_point.position.latitude} and Place.latitude >= {left_point.position.latitude})));'
+        mycursor = self.mydb.cursor()
         mycursor.execute(query)
         places = mycursor.fetchall()
         places_in_zone = []
         for x in places:
-            place = Place(name=x[1], category=x[2], position=Position(latitude=x[3], longtitude=x[4]))
+            place = Place(id=x[0], name=x[1], category=x[2], position=Position(latitude=x[3], longtitude=x[4]))
+            places_in_zone.append(place)
+
+        return places_in_zone
+
+
+    def getBorderPoints(self, points=None):
+        '''
+        :param points
+
+        points[0] = start_point
+        points[1..n-1] = pre_points
+        points[n] = end_point
+
+
+        Идея алгоритма
+        Будем постепенно проходиться по точкам от 0 до n - 1 и будем собирать все точки, которые у нас будут
+        в проекте
+        '''
+
+        # Задаю таблицу использованных точек в пути
+        # буду использовать формулу которая будет брать точки в зоне
+
+        query = 'SELECT * FROM Place WHERE '
+        start_point, end_point = points[0], points[1]
+        for i in range(1, len(points)):
+
+            left_point, right_point = None, None
+            if start_point.position.longtitude <= end_point.position.longtitude:  #
+                left_point = start_point
+                right_point = end_point
+            else:  #
+                left_point = start_point
+                right_point = end_point
+
+            query += f'({left_point.position.latitude} >= {right_point.position.latitude} and (Place.longtitude <= {right_point.position.longtitude} and (Place.longtitude >= {left_point.position.longtitude} and Place.latitude <= {left_point.position.latitude} and Place.latitude >= {right_point.position.latitude})) or ({left_point.position.latitude} < {right_point.position.latitude} and (Place.longtitude <= {right_point.position.longtitude} and Place.longtitude >= {left_point.position.longtitude} and Place.latitude <= {right_point.position.latitude} and Place.latitude >= {left_point.position.latitude}))) '
+            if i < len(points) - 2:
+                query += ' or '
+            # перемещение точек
+            if i < len(points) - 1:
+                start_point = points[i]
+                end_point = points[i + 1]
+        query += ';'
+        mycursor = self.mydb.cursor()
+        mycursor.execute(query)
+        places = mycursor.fetchall()
+        places_in_zone = []
+        for x in places:
+            place = Place(id=x[0], name=x[1], category=x[2], position=Position(latitude=x[3], longtitude=x[4]))
             places_in_zone.append(place)
         return places_in_zone
 
@@ -394,12 +465,14 @@ class Place:
     '''
 
     def __init__(self,
+                 id=None,
                  name=None,
                  position: Position = None,
                  category=None,
                  rank=None,
                  length=None,
                  visit_time=None):
+        self.id = id
         self.name = name
         self.position = position
         self.category = category
