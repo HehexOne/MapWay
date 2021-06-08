@@ -17,7 +17,9 @@ db = connection.cursor()
 db.execute("USE std_1450_mw;")
 connection.commit()
 
+
 from database_structures_and_functions import *
+
 
 def login_required(f):
     @wraps(f)
@@ -152,8 +154,25 @@ def logout():
 @app.route("/privacy", methods=["GET", "POST"])
 @login_required
 def privacy():
+    success = False
+    error = None
     user_object = get_user_by_id(session['id'])
-    return render_template('web/ChangePassword.html', user=user_object)
+    if request.method == "POST":
+        password = request.form.get("password")
+        password_repeat = request.form.get("password_repeat")
+        if password and password_repeat and password == password_repeat:
+            password = sha256(password.encode("utf-8")).hexdigest()
+            query = f"UPDATE User SET password_hash='{password}' WHERE id={user_object.id};"
+            try:
+                db.execute(query)
+                connection.commit()
+                success = True
+            except Exception as e:
+                print(e)
+                error = "Пароль не соответствует требованиям!"
+        else:
+            error = "Пароли либо не заполнены, либо не совпадают"
+    return render_template('web/ChangePassword.html', user=user_object, error=error, success=success)
 
 
 @app.route("/profile", methods=['GET', 'POST'])
@@ -192,7 +211,6 @@ def profile():
 @login_required
 def payments():
     return render_template("web/Payments.html")
-
 
 
 if __name__ == "__main__":
