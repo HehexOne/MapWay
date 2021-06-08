@@ -107,6 +107,7 @@ def get_user_by_credentials(email, password):
     password_hash = sha256(password.encode("utf-8")).hexdigest()
     query = f"SELECT * FROM User WHERE email='{email}' AND password_hash='{password_hash}' LIMIT 1"
     result = select_query_fetchone(query)
+    connection.commit()
     if result:
         # Converting database response to object
         return User(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
@@ -117,6 +118,7 @@ def get_user_by_credentials(email, password):
 def get_user_by_id(ident):
     query = f"SELECT * FROM User WHERE id={ident} LIMIT 1;"
     result = select_query_fetchone(query)
+    connection.commit()
     if result:
         return User(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
     else:
@@ -126,6 +128,7 @@ def get_user_by_id(ident):
 def get_category_by_id(ident):
     query = f"SELECT * FROM Category WHERE id={ident} LIMIT 1"
     result = select_query_fetchone(query)
+    connection.commit()
     if result:
         return Category(result[0], result[1])
     else:
@@ -140,6 +143,7 @@ def create_category_by_category_object(category_object: Category):
 def get_object_by_id(ident):
     query = f"SELECT * FROM Object WHERE id={ident} LIMIT 1"
     result = select_query_fetchone(query)
+    connection.commit()
     if result:
         return Object(result[0],
                       result[1],
@@ -165,6 +169,7 @@ def create_object_by_object_object(object: Object):
 def get_object_category_by_id(ident):
     query = f"SELECT * FROM Category WHERE id={ident} LIMIT 1"
     result = select_query_fetchone(query)
+    connection.commit()
     if result:
         return ObjectCategory(result[0], result[1], result[2])
     else:
@@ -180,6 +185,7 @@ def create_object_category_by_object_category_object(object_category: ObjectCate
 def get_object_in_route_by_id(ident):
     query = f"SELECT * FROM ObjectInRoute WHERE id={ident} LIMIT 1"
     result = select_query_fetchone(query)
+    connection.commit()
     if result:
         return ObjectInRoute(result[0],
                              result[1],
@@ -199,6 +205,7 @@ def create_object_in_route_by_Object_in_route_object(object_in_route: ObjectInRo
 def get_object_tag_by_id(ident):
     query = f"SELECT * FROM ObjectTag WHERE id={ident} LIMIT 1"
     result = select_query_fetchone(query)
+    connection.commit()
     if result:
         return ObjectTag(result[0],
                          result[1],
@@ -216,6 +223,7 @@ def create_object_tag_by_object_tag_object(object_tag: ObjectTag):
 def get_review_by_id(ident):
     query = f"SELECT * FROM Review WHERE id={ident} LIMIT 1"
     result = select_query_fetchone(query)
+    connection.commit()
     if result:
         return Review(result[0],
                       result[1],
@@ -235,6 +243,7 @@ def create_review_by_review_object(review_object: Review):
 def get_route_by_id(ident):
     query = f"SELECT * FROM Route WHERE id={ident} LIMIT 1"
     result = select_query_fetchone(query)
+    connection.commit()
     if result:
         return Route(result[0],
                      result[1],
@@ -253,6 +262,7 @@ def create_route_by_route_object(route_object: Route):
 def get_tag_by_id(ident):
     query = f"SELECT * FROM Tag WHERE id={ident}"
     result = select_query_fetchone(query)
+    connection.commit()
     if result:
         return Tag(result[0], result[1])
     else:

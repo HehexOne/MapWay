@@ -1,14 +1,14 @@
 from functools import wraps
 
 from flask import Flask, session, request, render_template, redirect, url_for
-# from login import *
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField
 from wtforms.validators import DataRequired, Length, EqualTo
 from mysql.connector import connect
 from hashlib import sha256
 import datetime
-from database_structures_and_functions import *
+from libgravatar import Gravatar
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "sup3rsecr3tp@ssw0rd"
@@ -17,6 +17,7 @@ db = connection.cursor()
 db.execute("USE std_1450_mw;")
 connection.commit()
 
+from database_structures_and_functions import *
 
 def login_required(f):
     @wraps(f)
@@ -76,33 +77,24 @@ class RegisterForm(FlaskForm):
     submit = SubmitField('Зарегистрироваться', render_kw={"class": Constants.button_submit_class})
 
 
-@app.route("/")
-@login_required
+@app.route("/", methods=["GET", "POST"])
 def index():
+    if session.get('id') is None:
+        return render_template("web/Landing.html")
     user = get_user_by_id(session['id'])
-    return render_template("new/MainPage.html", user=user)
+    return render_template("web/Main.html", user=user)
 
 
 @app.route("/about")
 @login_required
 def about():
     user = get_user_by_id(session['id'])
-    return render_template("new/AboutUs.html", user=user)
-
-
-@app.route("/object<int:ident>")
-@login_required
-def object(ident):
-    user = get_user_by_id(session['id'])
-    object_from_db = get_object_by_id(ident)
-    # if not object_from_db:
-    #     return redirect(url_for("not_found"))
-    return render_template("new/Object.html", user=user, object=object_from_db)
+    return render_template("web/AboutUs.html", user=user)
 
 
 @app.errorhandler(404)
 @app.route("/not_found")
-def not_found():
+def not_found(err):
     return "Not found!", 404
 
 
@@ -155,6 +147,52 @@ def registration():
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
+
+@app.route("/privacy", methods=["GET", "POST"])
+@login_required
+def privacy():
+    user_object = get_user_by_id(session['id'])
+    return render_template('web/ChangePassword.html', user=user_object)
+
+
+@app.route("/profile", methods=['GET', 'POST'])
+@login_required
+def profile():
+    error = None
+    user_object = get_user_by_id(session['id'])
+    if request.method == "POST":
+        name = request.form.get("name") if request.form.get("name") is not None else user_object.name
+        surname = request.form.get("surname") if request.form.get("surname") is not None else user_object.surname
+        email = request.form.get("email") if request.form.get("email") is not None else user_object.email
+        birthday = request.form.get("birthday") if request.form.get("birthday") is not None else user_object.birthday
+        fields = []
+        if name != user_object.name:
+            fields.append(f"name='{name}'")
+        if surname != user_object.surname:
+            fields.append(f"surname='{surname}'")
+        if email != user_object.email:
+            fields.append(f"email='{email}'")
+        if birthday != user_object.birthday:
+            fields.append(f"birthday='{birthday}'")
+        if len(fields) > 0:
+            query = "UPDATE User SET " + ",".join(fields) + f" WHERE id={user_object.id}"
+            try:
+                db.execute(query)
+                connection.commit()
+            except Exception as e:
+                print(e)
+                error = "Невозможно изменить данные! Проверьте правильность введённых данных!"
+            user_object = get_user_by_id(session['id'])
+    avatar_path = Gravatar(user_object.email).get_image(size=512)
+    return render_template("web/UserPage.html", user=user_object, avatar=avatar_path, error=error)
+
+
+@app.route("/payments")
+@login_required
+def payments():
+    return render_template("web/Payments.html")
+
 
 
 if __name__ == "__main__":

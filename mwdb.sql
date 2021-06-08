@@ -5,7 +5,7 @@ CREATE TABLE User (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(128),
     surname VARCHAR(128),
-    email VARCHAR(128),
+    email VARCHAR(128) UNIQUE,
     password_hash VARCHAR(256),
     rights_level INT UNSIGNED,
     subscription_level INT UNSIGNED,
