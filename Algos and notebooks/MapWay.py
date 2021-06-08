@@ -19,7 +19,7 @@ class MapWay:
         self.model = model
         self.places = places
         self.infinity = math.inf
-        self.user_points = user_points
+        self.user_points = []
         self.mydb = mysql.connector.connect(
             host='std-mysql',
             user='std_1455_map_way',
@@ -39,9 +39,9 @@ class MapWay:
         '''
 
         all_points = self.getBorderPoints(points=points)
-        self.user_points = HashTable(len(all_points))
+        self.user_points = [0] * 100000
         for i in all_points:
-            self.user_points.set_val(str(all_points[0].id), 0)
+            self.user_points[all_points[0].id] = 0
 
         # поиск объектов, которые попадают под интересующую нас зону
 
