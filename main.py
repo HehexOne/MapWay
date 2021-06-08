@@ -8,6 +8,7 @@ from mysql.connector import connect
 from hashlib import sha256
 import datetime
 from libgravatar import Gravatar
+from geocoding import Geocoder
 
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ connection = connect(host="std-mysql", username="std_1450_mw", password="1122334
 db = connection.cursor()
 db.execute("USE std_1450_mw;")
 connection.commit()
+geocoder = Geocoder()
 
 
 from database_structures_and_functions import *
