@@ -5,14 +5,6 @@ class GeocodingError(BaseException):
     pass
 
 
-class GeocoderPoint:
-
-    def __init__(self, long, lat, address):
-        self.longitude = long
-        self.latitude = lat
-        self.address = address
-
-
 class Geocoder:
 
     def get_coords(self, address):
@@ -26,7 +18,7 @@ class Geocoder:
                 geoobject = resp['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
                 address = geoobject['metaDataProperty']['GeocoderMetaData']['text']
                 position = [float(coord) for coord in geoobject['Point']['pos'].split()[::-1]]
-                return GeocoderPoint(position[0], position[1], address)
+                return [position[0], position[1], address]
         else:
             raise GeocodingError("Can't geocode this address")
 
