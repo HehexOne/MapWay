@@ -100,6 +100,9 @@ def index():
                 start = request.form.get('start')
                 finish = request.form.get('finish')
 
+                if not start and not finish:
+                    return redirect(url_for('error'))
+
                 start_point = gc.get_coords(start)
                 finish_point = gc.get_coords(finish)
 
@@ -322,54 +325,57 @@ def about():
 @login_required
 def mapPage(ident):
     user = get_user_by_id(session['id'])
+    try:
+        query = f"SELECT * FROM Route WHERE id={ident}"
+        cursor.execute(query)
 
-    query = f"SELECT * FROM Route WHERE id={ident}"
-    cursor.execute(query)
+        route_data = cursor.fetchone()
 
-    route_data = cursor.fetchone()
+        connection.commit()
 
-    connection.commit()
+        if route_data[1] != user.id:
+            return redirect(url_for("not_found"))
 
-    if route_data[1] != user.id:
-        return redirect(url_for("not_found"))
+        query = f"SELECT O.id, O.name, O.longitude, O.latitude, O.image_url, O.description, C.name," \
+                f"(SELECT ROUND(IFNULL(SUM(Review.rating) / COUNT(Review.rating), 0), 2)" \
+                f"FROM Review " \
+                f"INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
+                f"WHERE object_id=O.id) as `rating`, ObjectInRoute.id " \
+                f"FROM ObjectInRoute " \
+                f"INNER JOIN Object O on ObjectInRoute.object_id = O.id " \
+                f"INNER JOIN ObjectCategory OC on O.id = OC.object_id " \
+                f"INNER JOIN Category C ON OC.category_id = C.id " \
+                f"WHERE route_id={ident} "
+        cursor.execute(query)
 
-    query = f"SELECT O.id, O.name, O.longitude, O.latitude, O.image_url, O.description, C.name," \
-            f"(SELECT ROUND(IFNULL(SUM(Review.rating) / COUNT(Review.rating), 0), 2)" \
-            f"FROM Review " \
-            f"INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
-            f"WHERE object_id=O.id) as `rating`, ObjectInRoute.id " \
-            f"FROM ObjectInRoute " \
-            f"INNER JOIN Object O on ObjectInRoute.object_id = O.id " \
-            f"INNER JOIN ObjectCategory OC on O.id = OC.object_id " \
-            f"INNER JOIN Category C ON OC.category_id = C.id " \
-            f"WHERE route_id={ident} "
-    cursor.execute(query)
+        objects_collection = cursor.fetchall()
+        connection.commit()
 
-    objects_collection = cursor.fetchall()
-    connection.commit()
+        route_start = [route_data[6], route_data[5], route_data[4]]
+        route_end = [route_data[9], route_data[8], route_data[7]]
 
-    route_start = [route_data[6], route_data[5], route_data[4]]
-    route_end = [route_data[9], route_data[8], route_data[7]]
+        points_for_map = [route_start]
+        for place in objects_collection:
+            points_for_map.append([place[2], place[3], place[1]])
+        points_for_map.append(route_end)
 
-    points_for_map = [route_start]
-    for place in objects_collection:
-        points_for_map.append([place[2], place[3], place[1]])
-    points_for_map.append(route_end)
+        js_map_points = []
 
-    js_map_points = []
-
-    for i in range(len(points_for_map)):
-        pnt = points_for_map[i]
-        js_map_points.append("""myMap.geoObjects.add(new ymaps.Placemark([""" + str(pnt[0]) + ',' + str(pnt[1]) + """], {
-        balloonContent: '""" + pnt[2] + """',
-        iconCaption: '""" + str(i + 1) + """'
-    }, {
-        preset: 'islands#greenDotIconWithCaption'
-    }));""")
-    return render_template('MapPage.html', user=user, object_results=objects_collection,
-                           current_route=ident,
-                           start_point=route_start, finish_point=route_end,
-                           points=js_map_points)
+        for i in range(len(points_for_map)):
+            pnt = points_for_map[i]
+            js_map_points.append("""myMap.geoObjects.add(new ymaps.Placemark([""" + str(pnt[0]) + ',' + str(pnt[1]) + """], {
+            balloonContent: '""" + pnt[2] + """',
+            iconCaption: '""" + str(i + 1) + """'
+        }, {
+            preset: 'islands#greenDotIconWithCaption'
+        }));""")
+        return render_template('MapPage.html', user=user, object_results=objects_collection,
+                               current_route=ident,
+                               start_point=route_start, finish_point=route_end,
+                               points=js_map_points)
+    except Exception as e:
+        print(e)
+        return redirect(url_for('error'))
 
 
 @app.route('/tariffPay')
