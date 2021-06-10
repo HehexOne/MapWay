@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>MapWay_bsdesign</title>
+    <title>Проект для путешествий</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', type='text/css', filename='css/styles.min.css') }}">
 </head>
 
 <body class="d-flex flex-column justify-content-between" style="min-height: 100vh;">
@@ -33,7 +33,7 @@
                 <div class="col-sm-6 col-md-3 item">
                     <h3>Общая информация</h3>
                     <ul>
-                        <li><a href="#">О нас</a></li>
+                        <li><a href="/aboutUs">О сервисе</a></li>
                         <li><a href="#">Политика конфиденциальности<br></a></li>
                         <li><a href="#">Использование данных</a></li>
                         <li><a href="#">Почему именно мы?</a></li>

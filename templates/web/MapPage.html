@@ -4,22 +4,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>MapWay_bsdesign</title>
+    <title>Маршрут</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', type='text/css', filename='css/styles.min.css') }}">
 </head>
 
 <body>
     <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background: var(--bs-dark);">
-        <div class="container"><a class="navbar-brand" href="#" style="color: var(--bs-white);">MapWay</a><button data-bs-toggle="collapse" class="navbar-toggler text-white" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon text-white" style="color: rgb(255, 255, 255);filter: brightness(100%) invert(100%);"></span></button>
+        <div class="container"><a class="navbar-brand" href="/" style="color: var(--bs-white);">MapWay</a><button data-bs-toggle="collapse" class="navbar-toggler text-white" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon text-white" style="color: rgb(255, 255, 255);filter: brightness(100%) invert(100%);"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="/" style="color: rgb(255,255,255);">Главная</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/" style="color: rgb(255,255,255);">Главная</a></li>
                     <li class="nav-item"><a class="nav-link" href="/objects" style="color: #eeeeee;">Объекты</a></li>
                     <li class="nav-item" style="color: #eeeeee;"><a class="nav-link" href="/tariffs" style="color: rgb(255,255,255);">Тарифы</a></li>
-                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="color: #eeeeee;">Алпатов Александр&nbsp;</a>
+                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="color: #eeeeee;">{{ user.name }} {{ user.surname }}&nbsp;</a>
                         <div class="dropdown-menu" style="color: var(--bs-gray);background: rgb(54,60,64);"><a class="dropdown-item" href="/profile" style="color: rgb(255,255,255);">Профиль</a><a class="dropdown-item" href="/logout" style="color: rgb(255,255,255);">Выйти</a></div>
                     </li>
                 </ul>
@@ -28,64 +28,31 @@
     </nav>
     <main class="d-flex flex-column justify-content-center align-items-center justify-content-md-center align-items-md-center" style="width: 100%;margin-top: 40px;">
         <h1>Уникальный маршрут</h1>
-        <p>По вашим предпочтениям</p><iframe allowfullscreen="" frameborder="0" src="https://cdn.bootstrapstudio.io/placeholders/map.html" width="100%" height="400" style="width: 80%;border-radius: 10px;box-shadow: 0px 3px 20px 1px rgb(197,197,197);"></iframe>
-        <section class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 50px;width: 100%;padding: 20px;">
+        <p>По вашим предпочтениям</p>
+        <section class="d-flex flex-column justify-content-center align-items-center" style="width: 100%;">
             <p class="text-center" style="width: 85%;"><br> Наш умный алгоритм поиска интересных мест посчитал, что вам понравятся следующие места по пути:<br><br></p>
-            <h4 class="text-center" style="margin-bottom: 30px;width: 85%;max-width: 600px;"><i class="fa fa-map-marker"></i>&nbsp;Россия, г. Москва, Таганский Район<br></h4>
             <div class="col-md-8 d-flex flex-column">
-                <div class="d-flex justify-content-center flex-wrap" style="width: 100%;height: 100%;">
-                    <div class="col-md-6 flex-grow-1" style="min-width: 300px;min-height: 300px;">
-                        <div style="background: url(&quot;https://images.alphacoders.com/512/thumb-1920-512180.jpg&quot;) center / cover no-repeat;border-radius: 10px;height: 100%;width: 100%;"></div>
+                {% for place in object_results %}
+                    <div class="d-flex justify-content-center flex-wrap" style="width: 100%;height: 100%;">
+                        <div class="col-md-6 flex-grow-1" style="min-width: 300px;min-height: 300px;">
+                            <div style="background: url('{{ place[0][4] }}') center / cover no-repeat;border-radius: 10px;height: 100%;width: 100%;"></div>
+                        </div>
+                        <div class="col-md-5 d-flex flex-column justify-content-between" style="padding: 20px;min-width: 300px;min-height: 200px;">
+                            <div>
+                                <h3>{{ place[0][1] | truncate(50) }}</h3>
+                                <p class="d-inline">{{ place[0][8] }}<br></p>
+                                <p style="color: var(--bs-success);font-size: 15px;display: inline;width: 100%;">Оценка: {{ place[0][6] }}<br></p>
+                                <p>{{ place[0][5] | truncate(150) }}</p>
+                            </div><a href="{{ url_for('rateObject', id=place[1]) }}" class="btn btn-light" type="button" style="border-style: solid;border-color: rgb(0,0,0);margin-bottom: 10px;">Написать отзыв</a><a href="{{ url_for('object', id=place[0][0]) }}" class="btn btn-success" role="button">Перейти на страницу</a>
+                        </div>
                     </div>
-                    <div class="col-md-5 d-flex flex-column justify-content-between" style="padding: 20px;min-width: 300px;min-height: 200px;">
-                        <div>
-                            <h3>Храм "Божья помощь"</h3>
-                            <p class="d-inline">Русская православная церковь<br></p>
-                            <p style="color: var(--bs-success);font-size: 15px;display: inline;width: 100%;">Оценка: 4.62<br></p>
-                            <p>(Описание)</p>
-                        </div><button class="btn btn-light" type="button" style="border-style: solid;border-color: rgb(0,0,0);margin-bottom: 10px;">Написать отзыв</button><a class="btn btn-success" role="button">Перейти на страницу</a>
+                    <div style="min-height: 20px;">
+                        <hr>
                     </div>
-                </div>
-                <div style="min-height: 20px;">
-                    <hr>
-                </div>
-                <div class="d-flex justify-content-center flex-wrap" style="width: 100%;height: 100%;">
-                    <div class="col-md-6 flex-grow-1" style="min-width: 300px;min-height: 300px;">
-                        <div style="background: url(&quot;https://images.alphacoders.com/512/thumb-1920-512180.jpg&quot;) center / cover no-repeat;border-radius: 10px;height: 100%;width: 100%;"></div>
-                    </div>
-                    <div class="col-md-5 d-flex flex-column justify-content-between" style="padding: 20px;min-width: 300px;min-height: 200px;">
-                        <div>
-                            <h3>Храм "Божья помощь"</h3>
-                            <p class="d-inline">Русская православная церковь<br></p>
-                            <p style="color: var(--bs-success);font-size: 15px;display: inline;width: 100%;">Оценка: 4.62<br></p>
-                            <p>(Описание)</p>
-                        </div><button class="btn btn-light" type="button" style="border-style: solid;border-color: rgb(0,0,0);margin-bottom: 10px;">Написать отзыв</button><a class="btn btn-success" role="button">Перейти на страницу</a>
-                    </div>
-                </div>
-                <div style="min-height: 20px;">
-                    <hr>
-                </div>
-                <div class="d-flex justify-content-center flex-wrap" style="width: 100%;height: 100%;">
-                    <div class="col-md-6 flex-grow-1" style="min-width: 300px;min-height: 300px;">
-                        <div style="background: url(&quot;https://images.alphacoders.com/512/thumb-1920-512180.jpg&quot;) center / cover no-repeat;border-radius: 10px;height: 100%;width: 100%;"></div>
-                    </div>
-                    <div class="col-md-5 d-flex flex-column justify-content-between" style="padding: 20px;min-width: 300px;min-height: 200px;">
-                        <div>
-                            <h3>Храм "Божья помощь"</h3>
-                            <p class="d-inline">Русская православная церковь<br></p>
-                            <p style="color: var(--bs-success);font-size: 15px;display: inline;width: 100%;">Оценка: 4.62<br></p>
-                            <p>(Описание)</p>
-                        </div><button class="btn btn-light" type="button" style="border-style: solid;border-color: rgb(0,0,0);margin-bottom: 10px;">Написать отзыв</button><a class="btn btn-success" role="button">Перейти на страницу</a>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
-            <h4 class="text-center" style="margin-top: 30px;width: 85%;max-width: 600px;"><i class="fa fa-map-marker"></i>&nbsp;Россия, г. Москва, Пресненский Район<br></h4>
             <p>Вам понравился маршрут?</p>
-            <div class="d-flex flex-column justify-content-center align-items-center flex-wrap" style="width: 85%;"><button class="btn btn-primary flex-row" type="button" style="margin: 5px;color: rgb(0,0,0);background: rgb(255,255,255);border-width: 1px;border-color: rgb(0,0,0);max-width: 300px;width: 100%;">Оценить</button><a class="btn btn-success flex-row" role="button" style="border-width: 0px;max-width: 300px;margin: 5px;width: 100%;" href="/">Вернуться назад</a></div>
-        </section>
-        <section class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 50px;width: 100%;min-height: 300px;background: #379028;padding: 30px;">
-            <h1 class="text-center" style="color: rgb(255,255,255);">1% для планеты</h1>
-            <p class="text-center" style="color: rgb(255,255,255);width: 85%;max-width: 500px;">Леса являются важнейшими экосистемами нашей планеты, которые оказывают существенное влияние на климатические процессы и биологические процессы. Также лес играет большую роль и в хозяйственной деятельности человека. В последнее время всё чаще можно услышать опасения экологов относительно будущего лесных массивов.</p><button class="btn btn-outline-light" type="button">Выбрать тариф</button>
+            <div class="d-flex flex-column justify-content-center align-items-center flex-wrap" style="width: 85%;"><a href="{{ url_for('rateRoute', id=current_route) }}" class="btn btn-primary flex-row" type="button" style="margin: 5px;color: rgb(0,0,0);background: rgb(255,255,255);border-width: 1px;border-color: rgb(0,0,0);max-width: 300px;width: 100%;">Оценить</a><a class="btn btn-success flex-row" role="button" style="border-width: 0px;max-width: 300px;margin: 5px;width: 100%;margin-bottom: 20px;" href="/">Вернуться назад</a></div>
         </section>
     </main>
     <footer class="footer-dark">
@@ -98,7 +65,7 @@
                 <div class="col-sm-6 col-md-3 item">
                     <h3>Общая информация</h3>
                     <ul>
-                        <li><a href="#">О нас</a></li>
+                        <li><a href="/aboutUs">О сервисе</a></li>
                         <li><a href="#">Политика конфиденциальности<br></a></li>
                         <li><a href="#">Использование данных</a></li>
                         <li><a href="#">Почему именно мы?</a></li>
@@ -112,7 +79,7 @@
                         <li><a href="#">Как пользоваться?</a></li>
                     </ul>
                 </div>
-                <div class="col item social" style="margin-top: 40px;"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a></div>
+                <div class="col item social" style="margin-top: 40px;"><a href="/"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a></div>
             </div>
             <p class="copyright">MapWay © 2021</p>
         </div>

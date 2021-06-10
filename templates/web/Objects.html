@@ -4,22 +4,30 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>MapWay_bsdesign</title>
+    <title>Объекты</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', type='text/css', filename='css/styles.min.css') }}">
 </head>
-
+<style>
+    .page-link {
+        border: 1px solid rgb(160,160,160);
+        color: rgb(25, 135, 84);
+    }
+    .page-link:hover {
+        color: rgb(25, 135, 84);
+    }
+</style>
 <body>
     <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background: var(--bs-dark);">
-        <div class="container"><a class="navbar-brand" href="#" style="color: var(--bs-white);">MapWay</a><button data-bs-toggle="collapse" class="navbar-toggler text-white" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon text-white" style="color: rgb(255, 255, 255);filter: brightness(100%) invert(100%);"></span></button>
+        <div class="container"><a class="navbar-brand" href="/" style="color: var(--bs-white);">MapWay</a><button data-bs-toggle="collapse" class="navbar-toggler text-white" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon text-white" style="color: rgb(255, 255, 255);filter: brightness(100%) invert(100%);"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="/" style="color: rgb(255,255,255);">Главная</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/objects" style="color: rgb(143,143,143);">Объекты</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/" style="color: rgb(255,255,255);">Главная</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/objects" style="color: rgb(143,143,143);">Объекты</a></li>
                     <li class="nav-item" style="color: #eeeeee;"><a class="nav-link" href="/tariffs" style="color: #eeeeee;">Тарифы</a></li>
-                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="color: #eeeeee;">Алпатов Александр&nbsp;</a>
+                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="color: #eeeeee;">{{ user.name }} {{ user.surname }}&nbsp;</a>
                         <div class="dropdown-menu" style="color: var(--bs-gray);background: rgb(54,60,64);"><a class="dropdown-item" href="/profile" style="color: rgb(255,255,255);">Профиль</a><a class="dropdown-item" href="/logout" style="color: rgb(255,255,255);">Выйти</a></div>
                     </li>
                 </ul>
@@ -27,80 +35,75 @@
         </div>
     </nav>
     <main class="d-flex flex-column justify-content-center align-items-center justify-content-md-center align-items-md-center" style="width: 100%;margin-top: 40px;">
-        <div class="d-flex flex-column justify-content-center align-items-center" style="width: 85%;min-height: 300px;border-radius: 10px;padding: 20px;color: rgb(33, 37, 41);border: 2px solid rgb(179,179,179);background: url(&quot;https://i.pinimg.com/originals/30/ad/3d/30ad3d24d2273e2136d6bba97879faaf.jpg&quot;) bottom / cover no-repeat;">
+        <div class="d-flex flex-column justify-content-center align-items-center" style="width: 85%;min-height: 300px;border-radius: 10px;padding: 20px;color: rgb(33, 37, 41);border: 2px solid rgb(179,179,179);background: url({{url_for('static', filename='images/panorama.png')}}) bottom / cover no-repeat;">
             <h2 class="text-center" style="filter: invert(0%);color: rgb(255,255,255);margin-bottom: 20px;">Достопримечательности</h2>
-            <div class="d-flex flex-row justify-content-center align-items-center flex-wrap" style="background: #ffffff;border-radius: 5px;box-shadow: 0px 7px 15px rgba(33,37,41,0.14);width: 60%;"><input type="text" style="border-style: none;padding: 10px;border-radius: 10px;width: 100%;min-width: 150px;" placeholder="Название"><button class="btn btn-success" type="button" style="width: 100%;height: 100%;padding: 10px;min-width: 150px;">Поиск</button></div>
+            <form name="search" id="search" action="" method="post" class="d-flex flex-row justify-content-center align-items-center flex-wrap" style="background: #ffffff;border-radius: 5px;box-shadow: 0px 7px 15px rgba(33,37,41,0.14);width: 60%;">
+                <input name="search_input" id="search_input" type="text" style="border-style: none;padding: 10px;border-radius: 10px;width: 100%;min-width: 150px;" placeholder="Название">
+                <button class="btn btn-success" type="submit" style="width: 100%;height: 100%;padding: 10px;min-width: 150px;">Поиск</button>
+            </form>
         </div>
         <section class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 50px;width: 85%;">
             <div class="container">
                 <div class="row">
                     <div class="col-md-4" style="margin-bottom: 10px;">
                         <div class="d-flex flex-column align-items-center align-content-center flex-wrap" style="border-radius: 10px;padding: 20px;border: 1px solid #888888 ;">
-                            <h3>Сортировка</h3>
-                            <div class="btn-group dropdown" style="margin-bottom: 10px;width: 85%;min-width: 140px;"><button class="btn btn-primary" type="button" style="color: rgb(0,0,0);background: rgb(255,255,255);border-width: 1px;border-color: rgb(122,122,122);">По имени</button><button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" type="button" style="max-width: 50px;color: rgb(0,0,0);background: rgb(255,255,255);border-width: 1px;border-color: rgb(122,122,122);"></button>
-                                <div class="dropdown-menu"><a class="dropdown-item" href="#">Памятник</a><a class="dropdown-item" href="#">Парк</a><a class="dropdown-item" href="#">Церковь</a><a class="dropdown-item" href="#">Выстаквка</a></div>
-                            </div>
-                            <h3>Фильтры</h3>
-                            <p>Категория объекта</p>
-                            <div class="btn-group dropdown" style="margin-bottom: 10px;width: 85%;"><button class="btn btn-primary" type="button" style="color: rgb(0,0,0);background: rgb(255,255,255);border-width: 1px;border-color: rgb(122,122,122);">Памятник</button><button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" type="button" style="max-width: 50px;color: rgb(0,0,0);background: rgb(255,255,255);border-width: 1px;border-color: rgb(122,122,122);"></button>
-                                <div class="dropdown-menu"><a class="dropdown-item" href="#">Памятник</a><a class="dropdown-item" href="#">Парк</a><a class="dropdown-item" href="#">Церковь</a><a class="dropdown-item" href="#">Выстаквка</a></div>
-                            </div><button class="btn btn-primary" type="button" style="width: 85%;background: rgb(25,135,84);margin-bottom: 10px;">Применить</button>
+                            <form name="sort_form" id="sort_form" method="get" action="">
+                                <h3>Сортировка</h3>
+                                    <select name="sort" id="sort" class="form-select form-select-lg mb-3" aria-label=".form-select-lg пример" style="margin-bottom: 10px;width: 85%;min-width: 140px;">
+                                        <option name="sort1" id="sort1">По дате добавления</option>
+                                        <option name="sort2" id="sort2">По рейтингу</option>
+                                        <option name="sort3" id="sort3">По имени</option>
+                                    </select>
+                                <h3>Фильтры</h3>
+                                    <select name="filter" sort="filter" class="form-select form-select-lg mb-3" aria-label=".form-select-lg пример" style="margin-bottom: 10px;width: 85%;min-width: 140px;">
+                                                <option name="filter0" id="filter0">Все</option>
+                                            {% for i in range(0, 3) %}
+                                                <option name="filter{{ category_results[i][0]+1 }}" id="filter{{ category_results[i][0] }}">{{ category_results[i][1] }}</option>
+                                            {% endfor %}
+                                    </select>
+                                <input class="btn btn-primary" type="submit" style="width: 85%;background: rgb(25,135,84);margin-bottom: 10px;" value="Применить">
+                            </form>
                         </div>
                     </div>
                     <div class="col-md-8 d-flex flex-column" style="padding: 0;">
-                        <div class="d-flex flex-wrap" style="width: 100%;height: 100%;border-radius: 10px;border: 1px solid rgb(160,160,160) ;">
-                            <div class="col-md-6 flex-grow-1" style="min-width: 300px;min-height: 300px;">
-                                <div style="background: url(&quot;https://images.alphacoders.com/512/thumb-1920-512180.jpg&quot;) center / cover no-repeat;border-radius: 10px;height: 100%;width: 100%;"></div>
-                            </div>
-                            <div class="col-md-5 d-flex flex-column justify-content-between" style="padding: 20px;min-width: 300px;min-height: 200px;">
-                                <div>
-                                    <h3>Храм "Божья помощь"</h3>
-                                    <p class="d-inline">Русская православная церковь<br></p>
-                                    <p style="color: var(--bs-success);font-size: 15px;display: inline;width: 100%;">Оценка: 4.62<br></p>
-                                    <p>(Описание)</p>
+                         {% for i in range(0,3) %}
+                            <div class="d-flex flex-wrap" style="width: 100%;height: 100%;border-radius: 10px;border: 1px solid rgb(160,160,160) ;">
+                                <div class="col-md-6 flex-grow-1" style="min-width: 300px;min-height: 300px;">
+                                    <div style="background: url('{{ object_results[i][4] }}') center / cover no-repeat;border-radius: 10px;height: 100%;width: 100%;"></div>
+                                </div>
+                                <div class="col-md-5 d-flex flex-column justify-content-between" style="padding: 20px;min-width: 300px;min-height: 200px;">
+                                    <div>
+                                        <h3><a style="color: black; text-decoration: none;" href="{{ url_for('object', id=object_results[i][0]) }}">{{ object_results[i][1] | truncate(50) }}</a></h3>
+                                        <p class="d-inline">{{ object_results[i][8] }}<br></p>
+                                        <p style="color: var(--bs-success);font-size: 15px;display: inline;width: 100%;">Оценка: {{ rating[i][8] }}<br></p>
+                                        <p>{{ object_results[i][5] | truncate(150) }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div style="min-height: 20px;">
-                            <hr>
-                        </div>
-                        <div class="d-flex flex-wrap" style="width: 100%;height: 100%;border-radius: 10px;border: 1px solid rgb(160,160,160) ;">
-                            <div class="col-md-6 flex-grow-1" style="min-width: 300px;min-height: 300px;">
-                                <div style="background: url(&quot;https://images.alphacoders.com/512/thumb-1920-512180.jpg&quot;) center / cover no-repeat;border-radius: 10px;height: 100%;width: 100%;"></div>
-                            </div>
-                            <div class="col-md-5 d-flex flex-column justify-content-between" style="padding: 20px;min-width: 300px;min-height: 200px;">
-                                <div>
-                                    <h3>Храм "Божья помощь"</h3>
-                                    <p class="d-inline">Русская православная церковь<br></p>
-                                    <p style="color: var(--bs-success);font-size: 15px;display: inline;width: 100%;">Оценка: 4.62<br></p>
-                                    <p>(Описание)</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="min-height: 20px;">
-                            <hr>
-                        </div>
-                        <div class="d-flex flex-wrap" style="width: 100%;height: 100%;border-radius: 10px;border: 1px solid rgb(160,160,160) ;">
-                            <div class="col-md-6 flex-grow-1" style="min-width: 300px;min-height: 300px;">
-                                <div style="background: url(&quot;https://images.alphacoders.com/512/thumb-1920-512180.jpg&quot;) center / cover no-repeat;border-radius: 10px;height: 100%;width: 100%;"></div>
-                            </div>
-                            <div class="col-md-5 d-flex flex-column justify-content-between" style="padding: 20px;min-width: 300px;min-height: 200px;">
-                                <div>
-                                    <h3>Храм "Божья помощь"</h3>
-                                    <p class="d-inline">Русская православная церковь<br></p>
-                                    <p style="color: var(--bs-success);font-size: 15px;display: inline;width: 100%;">Оценка: 4.62<br></p>
-                                    <p>(Описание)</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="height: 120px;margin-top: 40px;"></div>
+                            <p></p>
+                         {% endfor %}
                     </div>
                 </div>
             </div>
         </section>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" {% if page > 1 %} href="{{ url_for('objects', page = (page + 1), search_input=search_input, sort=sort, filter=filter)}}" {% endif %}>Предыдущая</a></li>
+              {% if page == 1 %}
+                <li class="page-item"><a class="page-link" style="background-color: rgb(25,135,84); color: white" href="{{ url_for('objects', page = (page + 1), search_input=search_input, sort=sort, filter=filter)}}">{{ page }}</a></li>
+                <li class="page-item"><a class="page-link" href="{{ url_for('objects', page = (page + 1), search_input=search_input, sort=sort, filter=filter)}}">{{ page + 1 }}</a></li>
+                <li class="page-item"><a class="page-link" href="{{ url_for('objects', page = (page + 2), search_input=search_input, sort=sort, filter=filter)}}">{{ page + 2 }}</a></li>
+              {% elif page > 1%}
+                <li class="page-item"><a class="page-link" href="{{ url_for('objects', page = (page - 1), search_input=search_input, sort=sort, filter=filter)}}">{{ page - 1 }}</a></li>
+                <li class="page-item"><a class="page-link" style="background-color: rgb(25,135,84); color: white" href="{{ url_for('objects', page = page, search_input=search_input, sort=sort, filter=filter)}}">{{ page }}</a></li>
+                <li class="page-item"><a class="page-link" href="{{ url_for('objects', page = (page + 1), search_input=search_input, sort=sort, filter=filter)}}">{{ page + 1 }}</a></li>
+              {% endif %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('objects', page = (page + 1), search_input=search_input, sort=sort, filter=filter)}}">Следующая</a></li>
+          </ul>
+        </nav>
         <section class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 50px;width: 100%;min-height: 300px;background: #379028;padding: 30px;">
             <h1 class="text-center" style="color: rgb(255,255,255);">1% для планеты</h1>
-            <p class="text-center" style="color: rgb(255,255,255);width: 85%;max-width: 500px;">Леса являются важнейшими экосистемами нашей планеты, которые оказывают существенное влияние на климатические процессы и биологические процессы. Также лес играет большую роль и в хозяйственной деятельности человека. В последнее время всё чаще можно услышать опасения экологов относительно будущего лесных массивов.</p><button class="btn btn-outline-light" type="button">Выбрать тариф</button>
+            <p class="text-center" style="color: rgb(255,255,255);width: 85%;max-width: 500px;">Леса являются важнейшими экосистемами нашей планеты, которые оказывают существенное влияние на климатические процессы и биологические процессы. Также лес играет большую роль и в хозяйственной деятельности человека. В последнее время всё чаще можно услышать опасения экологов относительно будущего лесных массивов.</p><a href="/tariffs" class="btn btn-outline-light" type="button">Выбрать тариф</a>
         </section>
     </main>
     <footer class="footer-dark">
@@ -113,7 +116,7 @@
                 <div class="col-sm-6 col-md-3 item">
                     <h3>Общая информация</h3>
                     <ul>
-                        <li><a href="#">О нас</a></li>
+                        <li><a href="/aboutUs">О сервисе</a></li>
                         <li><a href="#">Политика конфиденциальности<br></a></li>
                         <li><a href="#">Использование данных</a></li>
                         <li><a href="#">Почему именно мы?</a></li>
