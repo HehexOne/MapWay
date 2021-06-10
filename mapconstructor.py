@@ -6,7 +6,7 @@ class MapConstructor:
             "ll": '37.620070,55.753630',
             "size": "650,350",
             "l": "map",
-            "z": "10",
+            "z": "9",
             "pt": "~".join([f"{points[i][1]},{points[i][0]},pm2dgm{i+1}" for i in range(len(points))])
         }
         url += "&".join([f"{key}={value}"for key, value in params.items()])

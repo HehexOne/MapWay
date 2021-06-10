@@ -4,22 +4,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Технические неполадки</title>
+    <title>MapWay_bsdesign</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', type='text/css', filename='css/styles.min.css') }}">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
 </head>
 
 <body class="d-flex flex-column justify-content-between" style="min-height: 100vh;">
     <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background: var(--bs-dark);">
-        <div class="container"><a class="navbar-brand" href="/" style="color: var(--bs-white);">MapWay</a><button data-bs-toggle="collapse" class="navbar-toggler text-white" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon text-white" style="color: rgb(255, 255, 255);filter: brightness(100%) invert(100%);"></span></button>
+        <div class="container"><a class="navbar-brand" href="#" style="color: var(--bs-white);">MapWay</a><button data-bs-toggle="collapse" class="navbar-toggler text-white" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon text-white" style="color: rgb(255, 255, 255);filter: brightness(100%) invert(100%);"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/" style="color: rgb(255,255,255);">Главная</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/" style="color: rgb(255,255,255);">Главная</a></li>
                     <li class="nav-item"><a class="nav-link" href="/objects" style="color: #eeeeee;">Объекты</a></li>
                     <li class="nav-item" style="color: #eeeeee;"><a class="nav-link" href="/tariffs" style="color: #eeeeee;">Тарифы</a></li>
-                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="color: #eeeeee;">{{ user.name }} {{ user.surname }}&nbsp;</a>
+                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="color: #eeeeee;">Алпатов Александр&nbsp;</a>
                         <div class="dropdown-menu" style="color: var(--bs-gray);background: rgb(54,60,64);"><a class="dropdown-item" href="/profile" style="color: rgb(255,255,255);">Профиль</a><a class="dropdown-item" href="/logout" style="color: rgb(255,255,255);">Выйти</a></div>
                     </li>
                 </ul>
@@ -31,7 +31,7 @@
             <div class="card-body">
                 <h4 class="card-title">Платежи</h4>
                 <h6 class="text-muted card-subtitle mb-2">Партнёр проекта "INFRA LLC"</h6>
-                <p class="card-text">Функции платежей на платформе были временно отключены! Все тарифы предоставляются бесплатно на время технических неполадок! &lt;3<br></p><a href="/tariffs" class="btn btn-success" role="button" style="width: 100%;margin-bottom: 10px;">Вернуться назад</a>
+                <p class="card-text">Функции платежей на платформе были временно отключены! Все тарифы предоставляются бесплатно на время технических неполадок! &lt;3<br></p><a class="btn btn-success" role="button" style="width: 100%;margin-bottom: 10px;" href="/user">Вернуться назад</a>
             </div>
         </div>
     </main>
@@ -45,7 +45,7 @@
                 <div class="col-sm-6 col-md-3 item">
                     <h3>Общая информация</h3>
                     <ul>
-                        <li><a href="/aboutUs">О сервисе</a></li>
+                        <li><a href="#">О нас</a></li>
                         <li><a href="#">Политика конфиденциальности<br></a></li>
                         <li><a href="#">Использование данных</a></li>
                         <li><a href="#">Почему именно мы?</a></li>

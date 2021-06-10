@@ -1,16 +1,16 @@
-from main import db, connection, sha256
+from main import cursor, connection, sha256
 
 
 def insert_query_get_id(query):
-    db.execute(query)
+    cursor.execute(query)
     connection.commit()
-    db.execute("SELECT LAST_INSERT_ID()")
-    return db.fetchone()[0]
+    cursor.execute("SELECT LAST_INSERT_ID()")
+    return cursor.fetchone()[0]
 
 
 def select_query_fetchone(query):
-    db.execute(query)
-    return db.fetchone()
+    cursor.execute(query)
+    return cursor.fetchone()
 
 
 class User:
