@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>О проекте</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', type='text/css', filename='css/styles.min.css') }}">
+</head>
+
+<body>
+<nav class="navbar navbar-light navbar-expand-md navigation-clean" style="background: var(--bs-dark);">
+    <div class="container"><a class="navbar-brand" href="/" style="color: var(--bs-white);">MapWay</a>
+        <button data-bs-toggle="collapse" class="navbar-toggler text-white" data-bs-target="#navcol-1"><span
+                class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon text-white"
+                                                                      style="color: rgb(255, 255, 255);filter: brightness(100%) invert(100%);"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="navbar-nav ms-auto">
+                <li><a class="btn btn-light" role="button"
+                       style="background: rgba(255,255,255,0);color: #ffffff;border: 1px solid rgb(255,255,255);height: 40px;"
+                       href="/login">Авторизация</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<main class="d-flex flex-column justify-content-center align-items-center justify-content-md-center align-items-md-center"
+      style="width: 100%;margin-top: 40px;">
+    <h1 class="text-center" style="filter: invert(0%);color: rgb(0,0,0);font-size: 25px;">О сервисе</h1>
+    <section class="d-flex flex-column justify-content-center align-items-center" style="margin-top: 50px;width: 100%;">
+        <div class="col-md-8 d-flex flex-column align-items-center align-content-center flex-wrap">
+            <div class="container d-flex align-items-center align-content-center">
+                <div class="row d-flex align-items-center align-content-center flex-wrap">
+                    <div class="col-md-8">
+                        <p style="text-align: center;"><br>MapWay - это коммерческий проект для любителей путешествий по
+                            интересным местам. Данный ресурс поможет вам составить уникальный маршрут, включающий в себя
+                            достопримечательности и просто красивые места, которые вас точно заинтересуют!<br><br></p>
+                    </div>
+                    <div class="col-md-4" style="text-align: center;margin-bottom: 10px;">
+                        <picture><img style="text-align: center;"></picture>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-4" style="text-align: center;">
+                        <picture style="text-align: center;"><img style="text-align: center;"></picture>
+                    </div>
+                    <div class="col-md-8">
+                        <p style="text-align: center;"><br>Принцип работы сайта очень прост: мы узнаём, что именно вам
+                            нравится, вы составляете маршрут от одной точки к другой и наш алгоритм находит места,
+                            которые могут быть вам интересны на пути. Вы можете зайти на страницу каждой
+                            достопримечательности и точно решить, хотите ли вы посетить её или нет. А если вам
+                            понравится, то можете оставить отзыв для других пользователей. <br><br></p>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <p style="text-align: center;"><br>Чтобы начать работу с сайтом, вам нужно зарегистрироваться с
+                            помощью электронной почты, а после зайти во вкладку “Маршруты” , выбрать, откуда и куда
+                            выхотите и начать поиск. Мы уверены, что с помощью алгоритмов нашего сайта ваше путешествие
+                            останется в памяти ещё надолго!<br><br></p>
+                    </div>
+                    <div class="col-md-4" style="text-align: center;margin-bottom: 10px;">
+                        <picture><img style="text-align: center;"></picture>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="btn btn-success" role="button" href="/">Вернуться на главную</a>
+    </section>
+    <section class="d-flex flex-column justify-content-center align-items-center"
+             style="margin-top: 50px;width: 100%;min-height: 300px;background: #379028;padding: 30px;">
+        <h1 class="text-center" style="color: rgb(255,255,255);">1% для планеты</h1>
+        <p class="text-center" style="color: rgb(255,255,255);width: 85%;max-width: 500px;">Леса являются важнейшими
+            экосистемами нашей планеты, которые оказывают существенное влияние на климатические процессы и биологические
+            процессы. Также лес играет большую роль и в хозяйственной деятельности человека. В последнее время всё чаще
+            можно услышать опасения экологов относительно будущего лесных массивов.</p><a href="/tariffs"
+                                                                                          class="btn btn-outline-light"
+                                                                                          type="button">Выбрать
+        тариф</a>
+    </section>
+</main>
+<footer class="footer-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 item text">
+                <h1>MapWay</h1>
+                <p>Сервис по подбору маршрутов, которые вам точно понравятся<br></p>
+            </div>
+            <div class="col-sm-6 col-md-3 item">
+                <h3>Общая информация</h3>
+                <ul>
+                    <li><a class="active" href="/aboutUs">О сервисе</a></li>
+                    <li><a href="#">Политика конфиденциальности<br></a></li>
+                    <li><a href="#">Использование данных</a></li>
+                    <li><a href="#">Почему именно мы?</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-6 col-md-3 item">
+                <h3>Помощь</h3>
+                <ul>
+                    <li><a href="#">Контакты</a></li>
+                    <li><a href="#">Поддержка</a></li>
+                    <li><a href="#">Как пользоваться?</a></li>
+                </ul>
+            </div>
+            <div class="col item social" style="margin-top: 40px;"><a href="#"><i class="icon ion-social-facebook"></i></a><a
+                    href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i
+                    class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a>
+            </div>
+        </div>
+        <p class="copyright">MapWay © 2021</p>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
