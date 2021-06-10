@@ -6,7 +6,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField
 from wtforms.validators import DataRequired, Length, EqualTo
 from hashlib import sha256
-import datetime
 from newMapWay import *
 from database_structures_and_functions import *
 from libgravatar import Gravatar
@@ -160,13 +159,19 @@ def objects():
                  f"LIMIT 3 OFFSET {(page - 1) * 3} "
 
     search_input = None
-    sort = None
-    filter = None
+    sort = request.args.get('sort')
+    filter = request.args.get('filter')
+
+    if request.method == 'POST':
+        if request.form.get('search_input'):
+            search_input = request.form.get('search_input')
+            object_sql = f"SELECT Object.id, Object.name, longitude, latitude, image_url, description, rating, age_restriction_level, C.name as 'category_name' FROM Object " \
+                         f"INNER JOIN ObjectCategory OC on Object.id = OC.object_id " \
+                         f"INNER JOIN Category C on OC.category_id = C.id " \
+                         f"WHERE Object.name LIKE '%{search_input}%' " \
+                         f"LIMIT 3 OFFSET {(page - 1) * 3} "
 
     if request.method == 'GET':
-        if request.args.get('search_input'):
-            search_input = request.args.get('search_input')
-
         if request.args.get('sort'):
             sort = request.args.get('sort')
             if sort == 'По имени':
@@ -177,31 +182,18 @@ def objects():
                 sort_condition = 'id'
 
             filter = request.args.get('filter')
-            if search_input:
-                if filter != 'Все':
-                    object_sql = f"SELECT Object.id, Object.name, longitude, latitude, image_url, description, rating, age_restriction_level, C.name as 'category_name' FROM Object " \
-                                 f"INNER JOIN ObjectCategory OC on Object.id = OC.object_id " \
-                                 f"INNER JOIN Category C on OC.category_id = C.id " \
-                                 f"WHERE C.name = '{filter}' AND Object.name LIKE '%{search_input}%' " \
-                                 f"ORDER BY Object.{sort_condition} LIMIT 3 OFFSET {(page - 1) * 3}"
-                else:
-                    object_sql = f"SELECT Object.id, Object.name, longitude, latitude, image_url, description, rating, age_restriction_level, C.name as 'category_name' FROM Object " \
-                                 f"INNER JOIN ObjectCategory OC on Object.id = OC.object_id " \
-                                 f"INNER JOIN Category C on OC.category_id = C.id " \
-                                 f"WHERE Object.name LIKE '%{search_input}%' " \
-                                 f"ORDER BY Object.{sort_condition} LIMIT 3 OFFSET {(page - 1) * 3})"
+            print(sort_condition, filter)
+            if filter != 'Все':
+                object_sql = f"SELECT Object.id, Object.name, longitude, latitude, image_url, description, rating, age_restriction_level, C.name as 'category_name' FROM Object " \
+                             f"INNER JOIN ObjectCategory OC on Object.id = OC.object_id " \
+                             f"INNER JOIN Category C on OC.category_id = C.id " \
+                             f"WHERE C.name = '{filter}' " \
+                             f"ORDER BY Object.{sort_condition} LIMIT 3 OFFSET {(page - 1) * 3}"
             else:
-                if filter != 'Все':
-                    object_sql = f"SELECT Object.id, Object.name, longitude, latitude, image_url, description, rating, age_restriction_level, C.name as 'category_name' FROM Object " \
-                                 f"INNER JOIN ObjectCategory OC on Object.id = OC.object_id " \
-                                 f"INNER JOIN Category C on OC.category_id = C.id " \
-                                 f"WHERE C.name = '{filter}' " \
-                                 f"ORDER BY Object.{sort_condition} LIMIT 3 OFFSET {(page - 1) * 3}"
-                else:
-                    object_sql = f"SELECT Object.id, Object.name, longitude, latitude, image_url, description, rating, age_restriction_level, C.name as 'category_name' FROM Object " \
-                                 f"INNER JOIN ObjectCategory OC on Object.id = OC.object_id " \
-                                 f"INNER JOIN Category C on OC.category_id = C.id " \
-                                 f"ORDER BY Object.{sort_condition} LIMIT 3 OFFSET {(page - 1) * 3})"
+                object_sql = f"SELECT Object.id, Object.name, longitude, latitude, image_url, description, rating, age_restriction_level, C.name as 'category_name' FROM Object " \
+                             f"INNER JOIN ObjectCategory OC on Object.id = OC.object_id " \
+                             f"INNER JOIN Category C on OC.category_id = C.id " \
+                             f"ORDER BY Object.{sort_condition} LIMIT 3 OFFSET {(page - 1) * 3}"
 
     cursor.execute(object_sql)
     object_results = cursor.fetchall()
@@ -210,10 +202,16 @@ def objects():
     cursor.execute(category_sql)
     category_results = cursor.fetchall()
 
+    get_rating_by_review_sql = "SELECT *, ROUND((SELECT IFNULL(SUM(Review.rating) / COUNT(Review.rating), 0) FROM Review " \
+                           "INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
+                           "WHERE object_id=Object.id), 2) as `rating` FROM Object LIMIT 3;"
+    cursor.execute(get_rating_by_review_sql)
+    get_rating_by_review = cursor.fetchall()
+
     return render_template('Objects.html', object_results=object_results,
                            page=page, user=user, category_results=category_results,
                            search_input=search_input, sort=sort,
-                           filter=filter)
+                           filter=filter, rating=get_rating_by_review)
 
 
 # решить проблему с комментами
@@ -229,24 +227,46 @@ def object():
     cursor.execute(object_sql)
     object_results = cursor.fetchall()
 
-    object_comments = "SELECT Review.id, Review.text, Review.rating, O.id as 'object_id' FROM Review" \
-                      "INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id" \
-                      f"INNER JOIN Object O on OIR.object_id = O.id Where O.id = {id};"
+    object_comments_sql = f"SELECT Review.id, Review.text, Review.rating, O.id as 'object_id', U.name as 'user_name' FROM Review " \
+                      f"INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
+                      f"INNER JOIN Object O on OIR.object_id = O.id " \
+                      f"INNER JOIN Route R on OIR.route_id = R.id " \
+                      f"INNER JOIN User U on R.user_id = U.id " \
+                      f"WHERE O.id = {id}"
+    cursor.execute(object_comments_sql)
+    object_comments_results = cursor.fetchall()
+
+    get_object_rating = f"SELECT ROUND(AVG(Review.rating), 2) as 'rating' FROM Review " \
+                        f"INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
+                        f"INNER JOIN Object O on OIR.object_id = O.id WHERE object_id = {id}"
+    cursor.execute(get_object_rating)
+    object_rating = cursor.fetchall()[0][0]
 
     return render_template('Object.html', id=id, object_results=object_results,
-                           object_comments=object_comments, user=user)
+                           object_comments=object_comments_results, user=user,
+                           object_rating=object_rating)
 
 
 @app.route("/aboutUs")
 def about():
-    user = get_user_by_id(session['id'])
-    return render_template("AboutUs.html", user=user)
+    if session.get('id') is None:
+        return render_template("AboutUs_landing.html")
+    else:
+        user = get_user_by_id(session['id'])
+        return render_template("AboutUs.html", user=user)
 
 
 @app.route('/mapPage', methods=["GET", "POST"])
 @login_required
 def mapPage():
     user = get_user_by_id(session['id'])
+    if user.subscription_level == 0:
+        number_of_places = 2;
+    elif user.subscription_level == 1:
+        number_of_places = 6;
+    else:
+        number_of_places = 10;
+
     try:
         if request.method == 'POST':
             start = request.form.get('start')
@@ -289,7 +309,7 @@ def mapPage():
 
             algo = MapWay()
             points = [start_place, finish_place]
-            route = list(algo.findBestWay(user=user, points=points, number_of_places=10))
+            route = list(algo.findBestWay(user=user, points=points, number_of_places=number_of_places))
 
             object_sql_append = ''
             object_sql = f"SELECT Object.id, Object.name, longitude, latitude, image_url, description, rating, age_restriction_level, C.name as 'category_name' FROM Object " \
@@ -297,6 +317,7 @@ def mapPage():
                          f"INNER JOIN Category C on OC.category_id = C.id "
 
             object_results = []
+            object_in_route_ids = []
             object_position = 0
             for place in route:
                 create_object_in_route_sql = "INSERT INTO ObjectInRoute " \
@@ -305,15 +326,26 @@ def mapPage():
                 cursor.execute(create_object_in_route_sql)
                 connection.commit()
 
+                get_route_object_id_sql = f'SELECT id FROM ObjectInRoute ' \
+                                          f'WHERE object_id = {place.id} ' \
+                                          f'AND route_id = {current_route_id[0][0]}'
+                cursor.execute(get_route_object_id_sql)
+                object_in_route_id = cursor.fetchall()[0][0]
+
                 object_sql_append = f"WHERE Object.name = '{place.name}'"
                 sql = object_sql + object_sql_append
                 cursor.execute(sql)
-                object_results.append(cursor.fetchall())
+                object_result = cursor.fetchall()
+                object_result.append(object_in_route_id)
+                object_results.append(object_result)
+
                 object_position += 1
+
     except Exception as e:
         return redirect(url_for('error'))
     return render_template('MapPage.html', user=user, object_results=object_results,
-                           current_route=current_route_id[0][0])
+                           current_route=current_route_id[0][0],
+                           object_in_route_ids=object_in_route_ids)
 
 
 @app.route('/tariffPay')
@@ -343,18 +375,42 @@ def tariffs():
 
 
 # ссылки + работа с базой (объект и маршрут)
-@app.route('/rateObject')
+@app.route('/rateObject', methods=['GET', 'POST'])
 @login_required
 def rateObject():
     user = get_user_by_id(session['id'])
+    object_in_route_id = request.args.get('id')
+
+    if  request.method == 'POST':
+
+        rate_object = request.form.get('rate')
+        review = request.form.get('review')
+
+        create_review_sql = f'INSERT INTO Review (object_in_route, ' \
+                            f'text, rating) VALUES ({object_in_route_id}, ' \
+                            f'"{review}", {rate_object})'
+        cursor.execute(create_review_sql)
+        connection.commit()
+
     return render_template('RateObject.html', user=user)
 
 
 # ссылки + работа с базой (маршрут)
-@app.route('/rateRoute')
+@app.route('/rateRoute', methods=['GET', 'POST'])
 @login_required
 def rateRoute():
     user = get_user_by_id(session['id'])
+    current_route_id = request.args.get('id')
+
+    if request.method == 'POST':
+
+        rate_route = request.form.get('rate')
+
+        rate_current_route_sql = f'UPDATE Route SET rating = {rate_route} ' \
+                                 f'WHERE id = {current_route_id}'
+        cursor.execute(rate_current_route_sql)
+        connection.commit()
+
     return render_template('RateRoute.html', user=user)
 
 
