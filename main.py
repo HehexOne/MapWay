@@ -106,7 +106,7 @@ def index():
                 start_point = gc.get_coords(start)
                 finish_point = gc.get_coords(finish)
 
-                if "Москва" not in start_point[2] or "Москва" not in finish_point[2]:
+                if "Россия, Москва" not in start_point[2] or "Россия, Москва" not in finish_point[2]:
                     return redirect(url_for('error'))
 
                 start_latitude = start_point[1]
