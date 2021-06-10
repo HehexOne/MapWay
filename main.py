@@ -8,10 +8,8 @@ from wtforms.validators import DataRequired, Length, EqualTo
 from hashlib import sha256
 from newMapWay import *
 from libgravatar import Gravatar
-from mapconstructor import MapConstructor
 from geocoding import Geocoder
 import datetime
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sup3rsecr3tp@ssw0rd'
@@ -20,7 +18,6 @@ cursor = connection.cursor()
 cursor.execute("USE std_1450_mw;")
 connection.commit()
 gc = Geocoder()
-mc = MapConstructor()
 
 
 from database_structures_and_functions import *
@@ -90,10 +87,68 @@ def index():
         return render_template("Landing.html")
     else:
         user = get_user_by_id(session['id'])
-        get_current_route_id_sql = 'SELECT id FROM Route ORDER BY id DESC LIMIT 1'
-        cursor.execute(get_current_route_id_sql)
-        current_route_id = cursor.fetchall()
-        return render_template("Main.html", user=user, current_route=current_route_id[0][0])
+
+        if request.method == 'POST':
+            try:
+                if user.subscription_level == 0:
+                    number_of_places = 2
+                elif user.subscription_level == 1:
+                    number_of_places = 6
+                else:
+                    number_of_places = 10
+
+                start = request.form.get('start')
+                finish = request.form.get('finish')
+
+                start_point = gc.get_coords(start)
+                finish_point = gc.get_coords(finish)
+
+                start_latitude = start_point[1]
+                start_longitude = start_point[0]
+
+                finish_latitude = finish_point[1]
+                finish_longitude = finish_point[0]
+
+                create_route_sql = f"INSERT INTO Route (user_id, date, rating, " \
+                                   f"start_name, start_longitude, start_latitude, " \
+                                   f"finish_name, finish_longitude, finish_latitude) " \
+                                   f"VALUES({user.id}, {datetime.datetime.now().strftime('%Y%m%d%H%M%S')}, 0, " \
+                                   f"'{start_point[2]}', {start_longitude}, {start_latitude}, " \
+                                   f"'{finish_point[2]}', {finish_longitude}, {finish_latitude})"
+                cursor.execute(create_route_sql)
+                connection.commit()
+
+                get_current_route_id_sql = 'SELECT LAST_INSERT_ID();'
+                cursor.execute(get_current_route_id_sql)
+                current_route_id = cursor.fetchone()[0]
+
+                start_place = Place(name=start_point[2],
+                                    longitude=start_longitude,
+                                    latitude=start_latitude)
+
+                finish_place = Place(name=finish_point[2],
+                                     longitude=finish_longitude,
+                                     latitude=finish_latitude)
+
+                algo = MapWay()
+                points = [start_place, finish_place]
+                route = list(algo.findBestWay(points=points, number_of_places=number_of_places))
+
+                object_position = 0
+
+                for place in route:
+                    if place.id is None:
+                        continue
+
+                    query = f"INSERT INTO ObjectInRoute (position, object_id, route_id) VALUES" \
+                            f" ({object_position}, {place.id}, {current_route_id})"
+                    cursor.execute(query)
+                    connection.commit()
+                return redirect(f"/mapPage/{current_route_id}")
+            except Exception as e:
+                print(e)
+                return redirect(url_for('error'))
+        return render_template("Main.html", user=user)
 
 
 @app.errorhandler(404)
@@ -210,8 +265,8 @@ def objects():
     category_results = cursor.fetchall()
 
     get_rating_by_review_sql = "SELECT *, ROUND((SELECT IFNULL(SUM(Review.rating) / COUNT(Review.rating), 0) FROM Review " \
-                           "INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
-                           "WHERE object_id=Object.id), 2) as `rating` FROM Object LIMIT 3;"
+                               "INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
+                               "WHERE object_id=Object.id), 2) as `rating` FROM Object LIMIT 3;"
     cursor.execute(get_rating_by_review_sql)
     get_rating_by_review = cursor.fetchall()
 
@@ -235,17 +290,17 @@ def object():
     object_results = cursor.fetchall()
 
     object_comments_sql = f"SELECT Review.id, Review.text, Review.rating, O.id as 'object_id', U.name as 'user_name' FROM Review " \
-                      f"INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
-                      f"INNER JOIN Object O on OIR.object_id = O.id " \
-                      f"INNER JOIN Route R on OIR.route_id = R.id " \
-                      f"INNER JOIN User U on R.user_id = U.id " \
-                      f"WHERE O.id = {id}"
+                          f"INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
+                          f"INNER JOIN Object O on OIR.object_id = O.id " \
+                          f"INNER JOIN Route R on OIR.route_id = R.id " \
+                          f"INNER JOIN User U on R.user_id = U.id " \
+                          f"WHERE O.id = {id}"
     cursor.execute(object_comments_sql)
     object_comments_results = cursor.fetchall()
 
     get_object_rating = "SELECT ROUND((SELECT IFNULL(SUM(Review.rating) / COUNT(Review.rating), 0) FROM Review " \
-                           "INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
-                           f"WHERE object_id={id}), 2)"
+                        "INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
+                        f"WHERE object_id={id}), 2)"
     cursor.execute(get_object_rating)
     object_rating = cursor.fetchall()[0][0]
 
@@ -263,112 +318,58 @@ def about():
         return render_template("AboutUs.html", user=user)
 
 
-@app.route('/mapPage', methods=["GET", "POST"])
+@app.route('/mapPage/<int:ident>', methods=["GET", "POST"])
 @login_required
-def mapPage():
+def mapPage(ident):
     user = get_user_by_id(session['id'])
-    if user.subscription_level == 0:
-        number_of_places = 2
-    elif user.subscription_level == 1:
-        number_of_places = 6
-    else:
-        number_of_places = 10
 
-# try:
-    if request.method == 'POST':
-        start = request.form.get('start')
-        finish = request.form.get('finish')
+    query = f"SELECT * FROM Route WHERE id={ident}"
+    cursor.execute(query)
 
-        start_point = gc.get_coords(start)
-        finish_point = gc.get_coords(finish)
+    route_data = cursor.fetchone()
 
-        # points_sql = f'SELECT * FROM Object ' \
-        #              f'WHERE Object.name LIKE \'{start}\'' \
-        #              f'OR Object.name LIKE \'{finish}\''
-        # cursor.execute(points_sql)
-        # points_results = cursor.fetchall()
+    connection.commit()
 
-        start_latitude = start_point[1]
-        start_longitude = start_point[0]
+    if route_data[1] != user.id:
+        return redirect(url_for("not_found"))
 
-        finish_latitude = finish_point[1]
-        finish_longitude = finish_point[0]
+    query = f"SELECT O.id, O.name, O.longitude, O.latitude, O.image_url, O.description, C.name," \
+            f"(SELECT ROUND(IFNULL(SUM(Review.rating) / COUNT(Review.rating), 0), 2)" \
+            f"FROM Review " \
+            f"INNER JOIN ObjectInRoute OIR on Review.object_in_route = OIR.id " \
+            f"WHERE object_id=O.id) as `rating`, ObjectInRoute.id " \
+            f"FROM ObjectInRoute " \
+            f"INNER JOIN Object O on ObjectInRoute.object_id = O.id " \
+            f"INNER JOIN ObjectCategory OC on O.id = OC.object_id " \
+            f"INNER JOIN Category C ON OC.category_id = C.id " \
+            f"WHERE route_id={ident} "
+    cursor.execute(query)
 
-        create_route_sql = f"INSERT INTO Route (user_id, date, rating, " \
-                           f"start_name, start_longitude, start_latitude, " \
-                           f"finish_name, finish_longitude, finish_latitude) " \
-                           f"VALUES({user.id}, {datetime.datetime.now().strftime('%Y%m%d%H%M%S')}, 0, " \
-                           f"'{start_point[2]}', {start_longitude}, {start_latitude}, " \
-                           f"'{finish_point[2]}', {finish_longitude}, {finish_latitude})"
-        cursor.execute(create_route_sql)
-        connection.commit()
+    objects_collection = cursor.fetchall()
+    connection.commit()
 
-        get_current_route_id_sql = 'SELECT id FROM Route ORDER BY id DESC LIMIT 1'
-        cursor.execute(get_current_route_id_sql)
-        current_route_id = cursor.fetchall()
+    route_start = [route_data[6], route_data[5], route_data[4]]
+    route_end = [route_data[9], route_data[8], route_data[7]]
 
-        start_place = Place(name=start_point[2],
-                            longitude=start_longitude,
-                            latitude=start_latitude)
+    points_for_map = [route_start]
+    for place in objects_collection:
+        points_for_map.append([place[2], place[3], place[1]])
+    points_for_map.append(route_end)
 
-        finish_place = Place(name=finish_point[2],
-                             longitude=finish_longitude,
-                             latitude=finish_latitude)
+    js_map_points = []
 
-        algo = MapWay()
-        points = [start_place, finish_place]
-        route = list(algo.findBestWay(points=points, number_of_places=number_of_places))
-
-        object_sql_append = ''
-        object_sql = f"SELECT Object.id, Object.name, longitude, latitude, image_url, description, rating, age_restriction_level, C.name as 'category_name' FROM Object " \
-                     f"INNER JOIN ObjectCategory OC on Object.id = OC.object_id " \
-                     f"INNER JOIN Category C on OC.category_id = C.id "
-
-        object_results = []
-        object_in_route_ids = []
-        object_position = 0
-        points_for_map = [start_point]
-        for place in route:
-            if place.id is None:
-                continue
-            create_object_in_route_sql = "INSERT INTO ObjectInRoute " \
-                                         "(position, object_id, route_id) " \
-                                         f"VALUES ({object_position}, {place.id}, {current_route_id[0][0]})"
-            cursor.execute(create_object_in_route_sql)
-            connection.commit()
-
-            get_route_object_id_sql = f'SELECT id FROM ObjectInRoute ' \
-                                      f'WHERE object_id = {place.id} ' \
-                                      f'AND route_id = {current_route_id[0][0]}'
-            cursor.execute(get_route_object_id_sql)
-            object_in_route_id = cursor.fetchall()[0][0]
-
-            sql = object_sql + f"WHERE Object.id={place.id}"
-            cursor.execute(sql)
-            object_result = cursor.fetchall()
-            object_result.append(object_in_route_id)
-            object_results.append(object_result)
-
-            points_for_map.append([place.longitude, place.latitude, place.name])
-            object_position += 1
-        points_for_map.append(finish_point)
-        points_for_js_map = []
-        for i in range(len(points_for_map)):
-            pnt = points_for_map[i]
-            points_for_js_map.append("""myMap.geoObjects.add(new ymaps.Placemark([""" + str(pnt[0]) + ',' + str(pnt[1]) + """], {
-            balloonContent: '""" + pnt[2] + """',
-            iconCaption: '""" + str(i + 1) + """'
-        }, {
-            preset: 'islands#greenDotIconWithCaption'
-        }));""")
-    # except Exception as e:
-    #     print(e)
-    #     return redirect(url_for('error'))
-        return render_template('MapPage.html', user=user, object_results=object_results,
-                               current_route=current_route_id[0][0],
-                               object_in_route_ids=object_in_route_ids,
-                               start_point=start_point, finish_point=finish_point,
-                               points=points_for_js_map)
+    for i in range(len(points_for_map)):
+        pnt = points_for_map[i]
+        js_map_points.append("""myMap.geoObjects.add(new ymaps.Placemark([""" + str(pnt[0]) + ',' + str(pnt[1]) + """], {
+        balloonContent: '""" + pnt[2] + """',
+        iconCaption: '""" + str(i + 1) + """'
+    }, {
+        preset: 'islands#greenDotIconWithCaption'
+    }));""")
+    return render_template('MapPage.html', user=user, object_results=objects_collection,
+                           current_route=ident,
+                           start_point=route_start, finish_point=route_end,
+                           points=js_map_points)
 
 
 @app.route('/tariffPay')
@@ -381,9 +382,9 @@ def tariffPay():
 @app.route('/payments')
 @login_required
 def payments():
-    if request.method == 'GET':
-        user = get_user_by_id(session['id'])
-        subscription_level = request.args.get('tariff')
+    user = get_user_by_id(session['id'])
+    subscription_level = request.args.get('tariff')
+    if subscription_level:
         tariff_sql = f'UPDATE User SET subscription_level = {subscription_level} WHERE id = {user.id}'
         cursor.execute(tariff_sql)
         connection.commit()
@@ -404,8 +405,12 @@ def rateObject():
     user = get_user_by_id(session['id'])
     object_in_route_id = request.args.get('id')
 
-    if  request.method == 'POST':
+    query = f"SELECT route_id FROM ObjectInRoute WHERE id={object_in_route_id}"
+    cursor.execute(query)
+    route_id = cursor.fetchone()[0]
+    connection.commit()
 
+    if request.method == 'POST':
         rate_object = request.form.get('rate')
         review = request.form.get('review')
 
@@ -415,7 +420,7 @@ def rateObject():
         cursor.execute(create_review_sql)
         connection.commit()
 
-    return render_template('RateObject.html', user=user)
+    return render_template('RateObject.html', user=user, route_id=route_id)
 
 
 # ссылки + работа с базой (маршрут)
@@ -426,7 +431,6 @@ def rateRoute():
     current_route_id = request.args.get('id')
 
     if request.method == 'POST':
-
         rate_route = request.form.get('rate')
 
         rate_current_route_sql = f'UPDATE Route SET rating = {rate_route} ' \
@@ -434,7 +438,7 @@ def rateRoute():
         cursor.execute(rate_current_route_sql)
         connection.commit()
 
-    return render_template('RateRoute.html', user=user)
+    return render_template('RateRoute.html', user=user, route_id=current_route_id)
 
 
 @app.route("/privacy", methods=["GET", "POST"])
@@ -491,6 +495,20 @@ def profile():
             user_object = get_user_by_id(session['id'])
     avatar_path = Gravatar(user_object.email).get_image(size=512)
     return render_template("UserPage.html", user=user_object, avatar=avatar_path, error=error)
+
+
+@app.route("/myRoutes")
+@login_required
+def user_routes():
+    user = get_user_by_id(session['id'])
+
+    query = f"SELECT *, (SELECT COUNT(*) FROM ObjectInRoute WHERE route_id=Route.id) " \
+            f"FROM Route WHERE user_id={user.id} ORDER BY date DESC"
+    cursor.execute(query)
+    routes = cursor.fetchall()
+    connection.commit()
+
+    return render_template("List.html", user=user, user_routes=routes)
 
 
 @app.route('/error')
