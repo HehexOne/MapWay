@@ -60,24 +60,24 @@
                                 name="name"
                                 class="form-control"
                                 type="text"
-                                style="margin-bottom: 10px;"><label
+                                style="margin-bottom: 10px;" required><label
                                 class="form-label">Фамилия</label><input
                                 minlength="2" maxlength="32"
                                 name="surname" value="{{ user.surname }}" class="form-control"
                                 type="text"
-                                style="margin-bottom: 10px;"><label
+                                style="margin-bottom: 10px;" required><label
                                 class="form-label">Почта</label><input name="email" minlength="5" maxlength="64"
                                                                        value="{{ user.email }}" class="form-control"
                                                                        type="text"
-                                                                       style="margin-bottom: 10px;"><label
+                                                                       style="margin-bottom: 10px;" required><label
                                 class="form-label">Дата рождения</label><input name="birthday"
                                                                                value="{{ user.birthday }}"
                                                                                min="1905-01-01" max="2018-01-01"
                                                                                class="form-control" type="date"
-                                                                               style="margin-bottom: 10px;"><label
+                                                                               style="margin-bottom: 10px;" required><label
                                 class="form-label">Идентификатор</label><input value="{{ user.id }}"
                                                                                class="form-control" type="text"
-                                                                               style="margin-bottom: 10px;" readonly="">
+                                                                               style="margin-bottom: 10px;" readonly="" required>
                             <button class="btn btn-success" type="submit" style="width: 100%;margin-top: 20px;">
                                 Изменить
                             </button>
