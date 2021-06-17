@@ -13,10 +13,6 @@ import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sup3rsecr3tp@ssw0rd'
-connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
-cursor = connection.cursor()
-cursor.execute("USE std_1450_mw;")
-connection.commit()
 gc = Geocoder()
 
 
@@ -83,6 +79,10 @@ class RegisterForm(FlaskForm):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     if session.get('id') is None:
         return render_template("Landing.html")
     else:
@@ -165,6 +165,10 @@ def not_found(err):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     form = LoginForm()
     our_errors = list()
     if form.validate_on_submit():
@@ -184,6 +188,10 @@ def login():
 
 @app.route("/registration", methods=["GET", "POST"])
 def registration():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     three_years_ago = datetime.datetime.now() - datetime.timedelta(days=3 * 365)
     form = RegisterForm()
     our_errors = list()
@@ -217,6 +225,10 @@ def logout():
 # поиск по достопримечательностям
 @app.route("/objects", methods=["GET", "POST"])
 def objects():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     user = get_user_by_id(session['id'])
     page = request.args.get('page', 1, type=int)
 
@@ -285,6 +297,10 @@ def objects():
 # решить проблему с комментами
 @app.route("/object")
 def object():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     user = get_user_by_id(session['id'])
     id = request.args.get('id', 1, type=int)
 
@@ -317,6 +333,10 @@ def object():
 
 @app.route("/aboutUs")
 def about():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     if session.get('id') is None:
         return render_template("AboutUs_landing.html")
     else:
@@ -327,6 +347,10 @@ def about():
 @app.route('/mapPage/<int:ident>', methods=["GET", "POST"])
 @login_required
 def mapPage(ident):
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     user = get_user_by_id(session['id'])
     try:
         query = f"SELECT * FROM Route WHERE id={ident}"
@@ -384,13 +408,16 @@ def mapPage(ident):
 @app.route('/tariffPay')
 @login_required
 def tariffPay():
-    user = get_user_by_id(session['id'])
     return redirect(url_for('payments'))
 
 
 @app.route('/payments')
 @login_required
 def payments():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     user = get_user_by_id(session['id'])
     subscription_level = request.args.get('tariff')
     if subscription_level:
@@ -403,6 +430,10 @@ def payments():
 @app.route('/tariffs')
 @login_required
 def tariffs():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     user = get_user_by_id(session['id'])
     return render_template('PlansPage.html', user=user)
 
@@ -411,6 +442,10 @@ def tariffs():
 @app.route('/rateObject', methods=['GET', 'POST'])
 @login_required
 def rateObject():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     user = get_user_by_id(session['id'])
     object_in_route_id = request.args.get('id')
 
@@ -436,6 +471,10 @@ def rateObject():
 @app.route('/rateRoute', methods=['GET', 'POST'])
 @login_required
 def rateRoute():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     user = get_user_by_id(session['id'])
     current_route_id = request.args.get('id')
 
@@ -453,6 +492,10 @@ def rateRoute():
 @app.route("/privacy", methods=["GET", "POST"])
 @login_required
 def privacy():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     success = False
     error = None
     user_object = get_user_by_id(session['id'])
@@ -477,6 +520,10 @@ def privacy():
 @app.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     error = None
     user_object = get_user_by_id(session['id'])
     if request.method == "POST":
@@ -509,6 +556,10 @@ def profile():
 @app.route("/myRoutes")
 @login_required
 def user_routes():
+    connection = connect(host="std-mysql", username="std_1450_mw", password="11223344")
+    cursor = connection.cursor()
+    cursor.execute("USE std_1450_mw;")
+    connection.commit()
     user = get_user_by_id(session['id'])
 
     query = f"SELECT *, (SELECT COUNT(*) FROM ObjectInRoute WHERE route_id=Route.id) " \
