@@ -38,7 +38,7 @@
                         <p style="color: var(--bs-success);font-size: 15px;display: inline;width: 100%;">Оценка: {{ object_rating }}<br></p>
                     </div>
                     <div class="d-flex flex-row justify-content-start align-items-center">
-                    </div><a class="btn btn-success" role="button" href="https://www.google.com/maps/place/{{object_results[0][2]}},{{object_results[0][3]}}">Посмотреть на карте</a>
+                    </div><a class="btn btn-success" role="button" href="https://yandex.ru/maps/?mode=search&text={{object_results[0][2]}} {{object_results[0][3]}}">Посмотреть на карте</a>
                 </div>
                 <div class="col-md-6 flex-grow-1" style="min-width: 300px;min-height: 300px;">
                     <div style="background: url('{{ object_results[0][4] }}') center / cover no-repeat;border-radius: 10px;height: 100%;width: 100%;"></div>
