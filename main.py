@@ -150,6 +150,7 @@ def index():
                             f" ({object_position}, {place.id}, {current_route_id})"
                     cursor.execute(query)
                     connection.commit()
+                    object_position += 1
                 return redirect(f"/mapPage/{current_route_id}")
             except Exception as e:
                 print(e)
@@ -372,7 +373,7 @@ def mapPage(ident):
                 f"INNER JOIN Object O on ObjectInRoute.object_id = O.id " \
                 f"INNER JOIN ObjectCategory OC on O.id = OC.object_id " \
                 f"INNER JOIN Category C ON OC.category_id = C.id " \
-                f"WHERE route_id={ident} "
+                f"WHERE route_id={ident} ORDER BY ObjectInRoute.position"
         cursor.execute(query)
 
         objects_collection = cursor.fetchall()
